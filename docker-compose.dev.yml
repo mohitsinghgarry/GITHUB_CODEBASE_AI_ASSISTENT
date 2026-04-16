@@ -1,0 +1,113 @@
+version: '3.8'
+
+# Development Docker Compose Configuration
+# This extends docker-compose.yml with development-specific overrides
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  # ============================================================================
+  # PostgreSQL - Development Overrides
+  # ============================================================================
+  postgres:
+    environment:
+      POSTGRES_DB: github_rag_dev
+    ports:
+      - "5432:5432"
+
+  # ============================================================================
+  # Redis - Development Overrides
+  # ============================================================================
+  redis:
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+
+  # ============================================================================
+  # Ollama - Development Overrides
+  # ============================================================================
+  ollama:
+    ports:
+      - "11434:11434"
+    # Remove GPU requirement for development
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  # ============================================================================
+  # Backend - Development Overrides
+  # ============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+      LOG_LEVEL: DEBUG
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/github_rag_dev
+    volumes:
+      - ./backend:/app
+      - repo_storage:/app/data/repositories
+      - faiss_indices:/app/data/indices
+      - /app/.venv  # Prevent overwriting venv
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+
+  # ============================================================================
+  # Celery Worker - Development Overrides
+  # ============================================================================
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      ENVIRONMENT: development
+      LOG_LEVEL: DEBUG
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/github_rag_dev
+    volumes:
+      - ./backend:/app
+      - repo_storage:/app/data/repositories
+      - faiss_indices:/app/data/indices
+      - /app/.venv
+    command: celery -A app.jobs.worker worker --loglevel=debug --concurrency=1
+
+  # ============================================================================
+  # Frontend - Development Overrides
+  # ============================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
+      NODE_ENV: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    ports:
+      - "3000:3000"
+
+  # ============================================================================
+  # Prometheus - Development Overrides
+  # ============================================================================
+  prometheus:
+    ports:
+      - "9090:9090"
+
+  # ============================================================================
+  # Grafana - Development Overrides
+  # ============================================================================
+  grafana:
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_LOG_LEVEL: debug
+    ports:
+      - "3001:3000"
