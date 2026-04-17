@@ -118,6 +118,9 @@ class RepositorySchema(BaseModel):
     error_message: Optional[str] = Field(None, description="Error message if status is failed")
     chunk_count: int = Field(0, description="Number of code chunks indexed")
     index_path: Optional[str] = Field(None, description="Path to FAISS index file")
+    total_files: Optional[int] = Field(None, description="Total number of unique files indexed")
+    total_chunks: Optional[int] = Field(None, description="Total number of code chunks (same as chunk_count)")
+    indexed_at: Optional[datetime] = Field(None, description="Timestamp when repository was last indexed")
     
     class Config:
         from_attributes = True

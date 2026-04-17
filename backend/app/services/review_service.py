@@ -52,17 +52,57 @@ logger = logging.getLogger(__name__)
 
 REVIEW_SYSTEM_PROMPT = """You are an expert code reviewer with deep knowledge of software engineering best practices, security, and performance optimization. Your task is to analyze code and provide constructive, actionable feedback.
 
-When reviewing code, consider:
-- **Bugs**: Logic errors, edge cases, incorrect behavior
-- **Security**: Vulnerabilities, injection risks, authentication issues
-- **Performance**: Inefficient algorithms, unnecessary operations, resource leaks
-- **Style**: Code formatting, naming conventions, readability
-- **Maintainability**: Code complexity, duplication, modularity
-- **Best Practices**: Language-specific idioms, design patterns
-- **Documentation**: Missing or incorrect comments and docstrings
-- **Error Handling**: Missing try-catch blocks, unhandled exceptions
+CRITICAL: You MUST find and report issues. Even simple code has potential problems. Be thorough and critical.
 
-Provide specific, actionable feedback with line numbers when possible."""
+When reviewing code, consider:
+- **Bugs**: Logic errors, edge cases, incorrect behavior, undefined variables, typos
+- **Security**: SQL injection, XSS, hardcoded secrets, insecure authentication, exposed errors
+- **Performance**: O(n²) algorithms, unnecessary loops, memory leaks, inefficient operations
+- **Style**: Naming conventions, formatting, readability, inconsistent style
+- **Maintainability**: Code complexity, duplication, long functions, unclear logic
+- **Best Practices**: Missing error handling, no input validation, magic numbers
+- **Documentation**: Missing comments, no docstrings, unclear variable names
+- **Error Handling**: Missing try-catch, unhandled exceptions, silent failures
+
+EXAMPLES OF ISSUES TO DETECT:
+
+1. SQL Injection:
+   BAD: query = f"SELECT * FROM users WHERE id = '{user_id}'"
+   ISSUE: User input directly in SQL query - CRITICAL security vulnerability
+   
+2. Undefined Variables:
+   BAD: const a = 10; kLjL
+   ISSUE: 'kLjL' is undefined - will cause runtime error
+   
+3. Missing Error Handling:
+   BAD: result = divide(a, b)
+   ISSUE: No check for division by zero
+   
+4. Hardcoded Secrets:
+   BAD: api_key = "sk-1234567890"
+   ISSUE: Secret in source code - security risk
+   
+5. Poor Variable Names:
+   BAD: const x = getData(); const y = x.filter(z => z.a > 10);
+   ISSUE: Unclear variable names reduce readability
+
+YOU MUST BE CRITICAL. Find at least 1-3 issues in most code. Provide specific, actionable feedback with line numbers.
+
+IMPORTANT: Format each issue EXACTLY as shown below. Each issue must start with **Severity**: on a new line.
+
+**Severity**: critical
+**Category**: bug
+**Title**: Brief issue title
+**Description**: Detailed explanation of the issue
+**Line**: 5
+**Suggestion**: How to fix the issue
+
+**Severity**: high
+**Category**: security
+**Title**: Another issue title
+**Description**: Detailed explanation
+**Line**: 10-12
+**Suggestion**: Fix suggestion"""
 
 
 IMPROVEMENT_SYSTEM_PROMPT = """You are an expert software engineer specializing in code refactoring and optimization. Your task is to improve code while maintaining its functionality.
@@ -81,12 +121,78 @@ Provide the complete improved code along with explanations of changes."""
 
 DIFF_REVIEW_SYSTEM_PROMPT = """You are an expert code reviewer analyzing pull request changes. Your task is to review code diffs and provide feedback on the changes.
 
+⚠️ CRITICAL: Pay EXTRA attention to REMOVED code (lines starting with -). Removed code often indicates:
+- Deleted error handling (try/except, if/else checks) → HIGH/CRITICAL severity
+- Deleted validation (input checks, boundary conditions) → HIGH/CRITICAL severity  
+- Deleted safety guards (null checks, division by zero) → HIGH/CRITICAL severity
+- Deleted security checks (authentication, authorization) → CRITICAL severity
+- Deleted resource cleanup (close(), dispose()) → HIGH severity
+
+REMOVED CODE PATTERNS TO FLAG:
+
+1. **Removed Error Handling**:
+   - Lines like: `- if x == 0:`, `- if x is None:`, `- try:`, `- except:`, `- raise`
+   - SEVERITY: HIGH or CRITICAL
+   - REASON: Removing error handling introduces bugs and crashes
+
+2. **Removed Validation**:
+   - Lines like: `- if not valid:`, `- assert`, `- if len(x) > 0:`
+   - SEVERITY: HIGH
+   - REASON: Missing validation allows invalid data
+
+3. **Removed Security Checks**:
+   - Lines like: `- if not authenticated:`, `- if not authorized:`
+   - SEVERITY: CRITICAL
+   - REASON: Security bypass vulnerability
+
+4. **Removed Resource Cleanup**:
+   - Lines like: `- file.close()`, `- connection.close()`, `- with open(...)`
+   - SEVERITY: HIGH
+   - REASON: Resource leaks, memory issues
+
 When reviewing diffs, focus on:
 - **Changed Lines**: Analyze the specific lines that were added, modified, or removed
+- **Removed Code**: CRITICALLY examine what was deleted and why
 - **Context**: Consider how changes affect surrounding code
 - **Impact**: Assess the potential impact of changes on the codebase
 - **Regressions**: Identify potential bugs or issues introduced by changes
 - **Improvements**: Recognize positive changes and improvements
+
+EXAMPLES OF CRITICAL ISSUES IN DIFFS:
+
+Example 1 - Removed Division by Zero Check:
+```diff
+- if b == 0:
+-     raise ValueError("Cannot divide by zero")
+  return a / b
+```
+**ISSUE**: CRITICAL - Removed zero-division check, will cause ZeroDivisionError
+**SEVERITY**: critical
+**CATEGORY**: bug
+
+Example 2 - Removed Authentication Check:
+```diff
+  def delete_user(user_id):
+-     if not current_user.is_admin:
+-         raise PermissionError("Admin only")
+      User.delete(user_id)
+```
+**ISSUE**: CRITICAL - Removed admin check, anyone can delete users
+**SEVERITY**: critical
+**CATEGORY**: security
+
+Example 3 - Removed File Close:
+```diff
+- with open(file_path, 'r') as f:
+-     data = f.read()
++ f = open(file_path, 'r')
++ data = f.read()
+```
+**ISSUE**: HIGH - File handle not closed, resource leak
+**SEVERITY**: high
+**CATEGORY**: bug
+
+YOU MUST BE CRITICAL OF REMOVED CODE. If safety/error handling is removed, flag it as HIGH or CRITICAL.
 
 Provide specific feedback on the changes with line numbers."""
 
@@ -152,6 +258,9 @@ class ReviewService:
             f"code_length={len(request.code)}"
         )
         
+        # First, run rule-based detection for common issues
+        rule_based_issues = self._detect_common_issues(request.code, request.language or "")
+        
         # Build review prompt
         prompt = self._build_review_prompt(request)
         
@@ -160,11 +269,14 @@ class ReviewService:
             review_text = await self.llm_service.generate(
                 prompt=prompt,
                 system_prompt=REVIEW_SYSTEM_PROMPT,
-                temperature=0.3,  # Lower temperature for more consistent analysis
+                temperature=0.7,  # Increased from 0.3 for more creative analysis
             )
             
             # Parse LLM response into structured issues
-            issues = self._parse_review_response(review_text, request.code)
+            llm_issues = self._parse_review_response(review_text, request.code)
+            
+            # Combine rule-based and LLM issues (remove duplicates)
+            issues = self._merge_issues(rule_based_issues, llm_issues)
             
             # Limit issues to max_issues
             if len(issues) > request.max_issues:
@@ -184,7 +296,8 @@ class ReviewService:
             
             logger.info(
                 f"Review complete: {summary.total_issues} issues found "
-                f"({summary.critical_count} critical, {summary.high_count} high)"
+                f"({summary.critical_count} critical, {summary.high_count} high) "
+                f"[{len(rule_based_issues)} rule-based, {len(llm_issues)} LLM]"
             )
             
             return CodeReviewResponse(
@@ -208,34 +321,16 @@ class ReviewService:
         language_info = f" (Language: {request.language})" if request.language else ""
         file_info = f" (File: {request.file_path})" if request.file_path else ""
         
-        prompt = f"""Please review the following code{language_info}{file_info}.
+        prompt = f"""Review the following code{language_info}{file_info}.
 
 Review Criteria: {criteria_desc}{focus_desc}
 
-Code to review:
+Code:
 ```
 {request.code}
 ```
 
-Please provide a detailed code review with the following format:
-
-## Issues Found
-
-For each issue, provide:
-- **Severity**: critical/high/medium/low/info
-- **Category**: bug/security/performance/style/maintainability/best_practice/documentation/error_handling
-- **Title**: Brief issue title
-- **Description**: Detailed explanation
-- **Line**: Line number(s) where the issue occurs
-- **Suggestion**: How to fix the issue (if applicable)
-
-## Overall Assessment
-
-Provide a summary of the code quality and main concerns.
-
-## Recommendations
-
-List 3-5 high-level recommendations for improving the code."""
+Analyze this code and report ALL issues you find. Format each issue exactly as shown in the system prompt, starting with **Severity**: on a new line."""
         
         return prompt
     
@@ -253,6 +348,9 @@ List 3-5 high-level recommendations for improving the code."""
         """
         issues = []
         
+        # Log the raw response for debugging
+        logger.debug(f"Parsing LLM response (length: {len(review_text)})")
+        
         # Split by issue markers (looking for severity keywords)
         severity_pattern = r'\*\*Severity\*\*:\s*(critical|high|medium|low|info)'
         category_pattern = r'\*\*Category\*\*:\s*(\w+)'
@@ -264,7 +362,9 @@ List 3-5 high-level recommendations for improving the code."""
         # Find all issue blocks
         issue_blocks = re.split(r'\n(?=\*\*Severity\*\*)', review_text)
         
-        for block in issue_blocks:
+        logger.debug(f"Found {len(issue_blocks)} potential issue blocks")
+        
+        for block_idx, block in enumerate(issue_blocks):
             if not block.strip():
                 continue
             
@@ -276,7 +376,31 @@ List 3-5 high-level recommendations for improving the code."""
             line_match = re.search(line_pattern, block)
             suggestion_match = re.search(suggestion_pattern, block, re.DOTALL)
             
+            # Log what we found
+            logger.debug(
+                f"Block {block_idx}: severity={bool(severity_match)}, "
+                f"category={bool(category_match)}, title={bool(title_match)}"
+            )
+            
             if not (severity_match and category_match and title_match):
+                # Try alternative parsing if standard format fails
+                # Look for numbered issues like "1. Issue Title"
+                alt_issue_pattern = r'(\d+)\.\s+(.+?)(?:\n|$)'
+                alt_match = re.search(alt_issue_pattern, block)
+                if alt_match:
+                    logger.debug(f"Using alternative parsing for block {block_idx}")
+                    # Create a basic issue from alternative format
+                    issue = CodeIssueSchema(
+                        severity=IssueSeverity.MEDIUM,
+                        category=IssueCategory.BUG,
+                        title=alt_match.group(2).strip(),
+                        description=block.strip(),
+                        start_line=None,
+                        end_line=None,
+                        code_snippet=None,
+                        suggestion=None,
+                    )
+                    issues.append(issue)
                 continue
             
             # Parse severity
@@ -319,6 +443,7 @@ List 3-5 high-level recommendations for improving the code."""
             
             issues.append(issue)
         
+        logger.info(f"Parsed {len(issues)} issues from LLM response")
         return issues
     
     def _extract_code_snippet(
@@ -337,6 +462,46 @@ List 3-5 high-level recommendations for improving the code."""
         
         snippet_lines = lines[snippet_start:snippet_end]
         return '\n'.join(snippet_lines)
+    
+    def _merge_issues(
+        self,
+        rule_based_issues: List[CodeIssueSchema],
+        llm_issues: List[CodeIssueSchema],
+    ) -> List[CodeIssueSchema]:
+        """
+        Merge rule-based and LLM issues, avoiding duplicates.
+        
+        Rule-based issues take priority for removed safety code.
+        """
+        merged = list(rule_based_issues)  # Start with rule-based issues
+        
+        # Add LLM issues that don't overlap with rule-based ones
+        for llm_issue in llm_issues:
+            # Check if this issue is similar to any rule-based issue
+            is_duplicate = False
+            for rule_issue in rule_based_issues:
+                # Consider duplicate if same line and similar title
+                if (rule_issue.start_line == llm_issue.start_line and
+                    rule_issue.title and llm_issue.title and
+                    (rule_issue.title.lower() in llm_issue.title.lower() or
+                     llm_issue.title.lower() in rule_issue.title.lower())):
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate:
+                merged.append(llm_issue)
+        
+        # Sort by severity (critical first)
+        severity_order = {
+            IssueSeverity.CRITICAL: 0,
+            IssueSeverity.HIGH: 1,
+            IssueSeverity.MEDIUM: 2,
+            IssueSeverity.LOW: 3,
+            IssueSeverity.INFO: 4,
+        }
+        merged.sort(key=lambda x: severity_order.get(x.severity, 5))
+        
+        return merged
     
     def _generate_summary(self, issues: List[CodeIssueSchema]) -> ReviewSummarySchema:
         """Generate summary statistics from issues."""
@@ -429,6 +594,215 @@ List 3-5 high-level recommendations for improving the code."""
             recommendations.append("Profile code and optimize hot paths")
         
         return recommendations[:5]  # Limit to 5 recommendations
+    
+    # ========================================================================
+    # Rule-Based Detection (Fallback)
+    # ========================================================================
+    
+    def _detect_common_issues(self, code: str, language: str) -> List[CodeIssueSchema]:
+        """
+        Detect common issues using regex patterns (fallback detection).
+        
+        This provides a safety net when LLM fails to detect obvious issues.
+        """
+        issues = []
+        lines = code.split('\n')
+        
+        # 1. SQL Injection patterns
+        sql_injection_patterns = [
+            (r'["\']SELECT.*\$\{.*\}["\']', 'String interpolation in SQL query'),
+            (r'["\']SELECT.*\+.*["\']', 'String concatenation in SQL query'),
+            (r'f["\']SELECT.*\{.*\}["\']', 'F-string in SQL query'),
+            (r'`SELECT.*\$\{.*\}`', 'Template literal in SQL query'),
+        ]
+        
+        for line_num, line in enumerate(lines, 1):
+            for pattern, desc in sql_injection_patterns:
+                if re.search(pattern, line, re.IGNORECASE):
+                    issues.append(CodeIssueSchema(
+                        severity=IssueSeverity.CRITICAL,
+                        category=IssueCategory.SECURITY,
+                        title="Potential SQL Injection Vulnerability",
+                        description=f"{desc}. User input should never be directly embedded in SQL queries. Use parameterized queries or prepared statements instead.",
+                        start_line=line_num,
+                        end_line=line_num,
+                        code_snippet=line.strip(),
+                        suggestion="Use parameterized queries: db.execute('SELECT * FROM users WHERE id = ?', [userId])"
+                    ))
+                    break
+        
+        # 2. Hardcoded secrets
+        secret_patterns = [
+            (r'(api_key|apikey|api-key)\s*[=:]\s*["\'][^"\']{10,}["\']', 'API key'),
+            (r'(password|passwd|pwd)\s*[=:]\s*["\'][^"\']+["\']', 'Password'),
+            (r'(secret|token|auth)\s*[=:]\s*["\'][^"\']{10,}["\']', 'Secret/Token'),
+            (r'(sk-[a-zA-Z0-9]{20,})', 'API key pattern'),
+        ]
+        
+        for line_num, line in enumerate(lines, 1):
+            for pattern, secret_type in secret_patterns:
+                if re.search(pattern, line, re.IGNORECASE):
+                    issues.append(CodeIssueSchema(
+                        severity=IssueSeverity.CRITICAL,
+                        category=IssueCategory.SECURITY,
+                        title=f"Hardcoded {secret_type} Detected",
+                        description=f"Sensitive {secret_type.lower()} found in source code. This is a security risk as secrets should never be committed to version control.",
+                        start_line=line_num,
+                        end_line=line_num,
+                        code_snippet=line.strip(),
+                        suggestion="Use environment variables: api_key = os.getenv('API_KEY')"
+                    ))
+                    break
+        
+        # 3. Undefined variables / typos (improved detection)
+        # Look for standalone identifiers that might be undefined
+        if language.lower() in ['javascript', 'typescript']:
+            for line_num, line in enumerate(lines, 1):
+                # Skip comments and strings
+                if line.strip().startswith('//') or line.strip().startswith('/*'):
+                    continue
+                
+                # Skip lines that are inside template literals or SQL queries
+                if '`' in line or 'SELECT' in line.upper() or 'FROM' in line.upper():
+                    continue
+                
+                # Look for standalone identifiers (not preceded by keywords or operators)
+                # Pattern: word boundary + identifier + word boundary, not after declaration keywords
+                potential_vars = re.findall(r'(?<!const\s)(?<!let\s)(?<!var\s)(?<!function\s)(?<!class\s)(?<!\.)\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[:(=])', line)
+                
+                for var_name in potential_vars:
+                    # Skip common keywords and built-ins
+                    if var_name in ['console', 'log', 'error', 'warn', 'if', 'else', 'for', 'while', 'return', 'await', 'async', 'const', 'let', 'var', 'function', 'class', 'import', 'export', 'from', 'true', 'false', 'null', 'undefined', 'this', 'new', 'typeof', 'instanceof', 'try', 'catch', 'throw', 'finally']:
+                        continue
+                    
+                    # Check if variable looks suspicious (mixed case, short random-looking names)
+                    # Pattern 1: Mixed case like kLjL, aBcD
+                    # Pattern 2: Very short random-looking names
+                    is_suspicious = (
+                        (len(var_name) <= 4 and sum(1 for c in var_name if c.isupper()) >= 2) or  # Short with multiple capitals
+                        (re.match(r'^[a-z]{1,2}[A-Z][a-z]*[A-Z]', var_name))  # Pattern like kLjL
+                    )
+                    
+                    if is_suspicious:
+                        # Check if it's defined anywhere in the code
+                        if not re.search(r'\b(const|let|var|function|class)\s+' + re.escape(var_name) + r'\b', code):
+                            issues.append(CodeIssueSchema(
+                                severity=IssueSeverity.HIGH,
+                                category=IssueCategory.BUG,
+                                title=f"Potentially Undefined Variable: '{var_name}'",
+                                description=f"Variable '{var_name}' appears to be used but not defined. This will cause a ReferenceError at runtime.",
+                                start_line=line_num,
+                                end_line=line_num,
+                                code_snippet=line.strip(),
+                                suggestion=f"Define the variable before use: const {var_name} = ... or check for typos"
+                            ))
+                            break  # Only report once per line
+        
+        # 4. Missing error handling for division
+        if re.search(r'\/\s*[a-zA-Z_]', code) and not re.search(r'(try|catch|if.*[!=]=\s*0)', code):
+            for line_num, line in enumerate(lines, 1):
+                if re.search(r'\/\s*[a-zA-Z_]', line):
+                    issues.append(CodeIssueSchema(
+                        severity=IssueSeverity.MEDIUM,
+                        category=IssueCategory.ERROR_HANDLING,
+                        title="Missing Division by Zero Check",
+                        description="Division operation without checking for zero. This can cause runtime errors or crashes.",
+                        start_line=line_num,
+                        end_line=line_num,
+                        code_snippet=line.strip(),
+                        suggestion="Add validation: if (divisor === 0) throw new Error('Division by zero')"
+                    ))
+                    break
+        
+        # 5. Console.log in production code
+        if language.lower() in ['javascript', 'typescript']:
+            for line_num, line in enumerate(lines, 1):
+                if re.search(r'console\.(log|error|warn|info)', line):
+                    issues.append(CodeIssueSchema(
+                        severity=IssueSeverity.LOW,
+                        category=IssueCategory.BEST_PRACTICE,
+                        title="Console Statement in Code",
+                        description="Console statements should be removed or replaced with proper logging in production code.",
+                        start_line=line_num,
+                        end_line=line_num,
+                        code_snippet=line.strip(),
+                        suggestion="Use a proper logging library or remove console statements"
+                    ))
+        
+        # 6. Missing return type (TypeScript)
+        if language.lower() == 'typescript':
+            for line_num, line in enumerate(lines, 1):
+                if re.search(r'function\s+\w+\s*\([^)]*\)\s*\{', line) and not re.search(r':\s*\w+\s*\{', line):
+                    issues.append(CodeIssueSchema(
+                        severity=IssueSeverity.LOW,
+                        category=IssueCategory.BEST_PRACTICE,
+                        title="Missing Return Type Annotation",
+                        description="Function lacks explicit return type. Adding type annotations improves code clarity and catches errors.",
+                        start_line=line_num,
+                        end_line=line_num,
+                        code_snippet=line.strip(),
+                        suggestion="Add return type: function name(): ReturnType { ... }"
+                    ))
+        
+        # 7. Empty catch blocks
+        for line_num, line in enumerate(lines, 1):
+            if re.search(r'catch\s*\([^)]*\)\s*\{\s*\}', line):
+                issues.append(CodeIssueSchema(
+                    severity=IssueSeverity.MEDIUM,
+                    category=IssueCategory.ERROR_HANDLING,
+                    title="Empty Catch Block",
+                    description="Catch block is empty, silently swallowing errors. This makes debugging difficult.",
+                    start_line=line_num,
+                    end_line=line_num,
+                    code_snippet=line.strip(),
+                    suggestion="Handle the error: catch (e) { logger.error(e); throw e; }"
+                ))
+        
+        logger.info(f"Rule-based detection found {len(issues)} issues")
+        return issues
+    
+    def _merge_issues(
+        self,
+        rule_based: List[CodeIssueSchema],
+        llm_based: List[CodeIssueSchema]
+    ) -> List[CodeIssueSchema]:
+        """
+        Merge rule-based and LLM-based issues, removing duplicates.
+        
+        Prioritizes rule-based issues as they are more reliable.
+        """
+        # Start with rule-based issues
+        merged = list(rule_based)
+        
+        # Add LLM issues that don't overlap with rule-based
+        for llm_issue in llm_based:
+            # Check if similar issue exists in rule-based
+            is_duplicate = False
+            for rule_issue in rule_based:
+                # Consider duplicate if same line and similar title
+                if (rule_issue.start_line == llm_issue.start_line and
+                    rule_issue.category == llm_issue.category):
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate:
+                merged.append(llm_issue)
+        
+        # Sort by severity and line number
+        severity_order = {
+            IssueSeverity.CRITICAL: 0,
+            IssueSeverity.HIGH: 1,
+            IssueSeverity.MEDIUM: 2,
+            IssueSeverity.LOW: 3,
+            IssueSeverity.INFO: 4,
+        }
+        
+        merged.sort(key=lambda x: (
+            severity_order.get(x.severity, 999),
+            x.start_line or 999
+        ))
+        
+        return merged
     
     # ========================================================================
     # Code Improvement (Requirement 7.4)
@@ -617,10 +991,14 @@ Brief summary of all improvements."""
         # Parse diff into structured format (Requirement 7.5)
         files = self._parse_diff(request.diff)
         
+        # STEP 1: Run rule-based detection for removed safety code
+        rule_based_issues = self._detect_removed_safety_code(request.diff)
+        logger.info(f"Rule-based detection found {len(rule_based_issues)} issues")
+        
         # Build diff review prompt (Requirement 7.6)
         prompt = self._build_diff_review_prompt(request, files)
         
-        # Generate review using LLM
+        # STEP 2: Generate review using LLM
         try:
             review_text = await self.llm_service.generate(
                 prompt=prompt,
@@ -629,7 +1007,10 @@ Brief summary of all improvements."""
             )
             
             # Parse LLM response into structured issues
-            issues = self._parse_review_response(review_text, request.diff)
+            llm_issues = self._parse_review_response(review_text, request.diff)
+            
+            # STEP 3: Merge rule-based and LLM issues (avoid duplicates)
+            issues = self._merge_issues(rule_based_issues, llm_issues)
             
             # Limit issues
             if len(issues) > request.max_issues:
@@ -645,7 +1026,8 @@ Brief summary of all improvements."""
             approval_recommendation = self._generate_approval_recommendation(summary)
             
             logger.info(
-                f"Diff review complete: {summary.total_issues} issues found, "
+                f"Diff review complete: {summary.total_issues} issues found "
+                f"({len(rule_based_issues)} rule-based, {len(llm_issues)} LLM), "
                 f"recommendation: {approval_recommendation}"
             )
             
@@ -660,6 +1042,75 @@ Brief summary of all improvements."""
         except Exception as e:
             logger.error(f"Diff review failed: {e}", exc_info=True)
             raise
+    
+    def _detect_removed_safety_code(self, diff: str) -> List[CodeIssueSchema]:
+        """
+        Detect removed safety code using rule-based patterns.
+        
+        This pre-check catches common dangerous removals before LLM analysis.
+        """
+        issues = []
+        
+        # Patterns for removed safety code
+        removed_patterns = [
+            # Error handling
+            (r'-\s*if\s+.*\s*==\s*0\s*:', 'critical', 'bug', 
+             'Removed zero-division check', 'Division by zero will cause runtime error'),
+            (r'-\s*if\s+.*\s*is\s+None\s*:', 'high', 'bug',
+             'Removed null check', 'Null reference may cause errors'),
+            (r'-\s*try\s*:', 'high', 'error_handling',
+             'Removed try block', 'Error handling removed, exceptions unhandled'),
+            (r'-\s*except\s+.*:', 'high', 'error_handling',
+             'Removed except block', 'Exception handling removed'),
+            (r'-\s*raise\s+', 'high', 'error_handling',
+             'Removed exception raising', 'Error condition no longer reported'),
+            
+            # Validation
+            (r'-\s*assert\s+', 'medium', 'bug',
+             'Removed assertion', 'Validation check removed'),
+            (r'-\s*if\s+not\s+.*:', 'medium', 'bug',
+             'Removed validation check', 'Input validation removed'),
+            
+            # Security
+            (r'-\s*if\s+not\s+.*\.is_authenticated', 'critical', 'security',
+             'Removed authentication check', 'Security bypass vulnerability'),
+            (r'-\s*if\s+not\s+.*\.is_admin', 'critical', 'security',
+             'Removed authorization check', 'Privilege escalation risk'),
+            (r'-\s*if\s+not\s+.*authorized', 'critical', 'security',
+             'Removed authorization check', 'Access control bypass'),
+            
+            # Resource management
+            (r'-\s*with\s+open\(', 'high', 'bug',
+             'Removed context manager', 'File handle may not be closed'),
+            (r'-\s*\.close\(\)', 'high', 'bug',
+             'Removed resource cleanup', 'Resource leak potential'),
+            (r'-\s*finally\s*:', 'high', 'bug',
+             'Removed finally block', 'Cleanup code removed'),
+        ]
+        
+        for pattern, severity, category, title, description in removed_patterns:
+            matches = re.finditer(pattern, diff, re.MULTILINE | re.IGNORECASE)
+            for match in matches:
+                # Extract line number from diff context
+                line_num = diff[:match.start()].count('\n') + 1
+                
+                issue = CodeIssueSchema(
+                    severity=severity,
+                    category=category,
+                    title=f"⚠️ REMOVED: {title}",
+                    description=f"{description}. This removal was detected by automated safety checks and requires careful review.",
+                    file_path=None,
+                    start_line=line_num,
+                    end_line=line_num,
+                    code_snippet=match.group(0),
+                    suggestion="Review this removal carefully. If intentional, ensure alternative safety measures are in place.",
+                )
+                issues.append(issue)
+        
+        if issues:
+            logger.warning(f"Detected {len(issues)} removed safety code patterns")
+        
+        return issues
     
     def _parse_diff(self, diff: str) -> List[DiffFileSchema]:
         """

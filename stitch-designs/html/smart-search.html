@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#131315",
+            "on-primary-fixed-variant": "#0e009d",
+            "secondary-dim": "#8455ef",
+            "on-background": "#f9f5f8",
+            "secondary-fixed-dim": "#ceb9ff",
+            "secondary-container": "#5516be",
+            "surface-container": "#19191c",
+            "outline": "#767577",
+            "tertiary-fixed": "#69f6b8",
+            "primary-container": "#9396ff",
+            "error-dim": "#d73357",
+            "on-tertiary-fixed": "#00452d",
+            "surface-tint": "#a3a6ff",
+            "inverse-surface": "#fcf8fb",
+            "surface-bright": "#2c2c2f",
+            "on-surface-variant": "#adaaad",
+            "tertiary-fixed-dim": "#58e7ab",
+            "on-secondary-fixed": "#40009b",
+            "primary-fixed": "#9396ff",
+            "on-tertiary": "#006443",
+            "on-error": "#490013",
+            "surface-container-lowest": "#000000",
+            "on-tertiary-container": "#005a3c",
+            "inverse-on-surface": "#565557",
+            "tertiary-dim": "#58e7ab",
+            "on-secondary": "#280067",
+            "primary": "#a3a6ff",
+            "tertiary-container": "#69f6b8",
+            "on-surface": "#f9f5f8",
+            "surface-container-highest": "#262528",
+            "surface-dim": "#0e0e10",
+            "primary-dim": "#6063ee",
+            "secondary-fixed": "#dac9ff",
+            "inverse-primary": "#494bd7",
+            "error-container": "#a70138",
+            "tertiary": "#9bffce",
+            "error": "#ff6e84",
+            "on-primary": "#0f00a4",
+            "on-tertiary-fixed-variant": "#006544",
+            "background": "#0e0e10",
+            "on-primary-container": "#0a0081",
+            "surface-container-high": "#1f1f22",
+            "on-primary-fixed": "#000000",
+            "outline-variant": "#48474a",
+            "surface": "#0e0e10",
+            "secondary": "#ac8aff",
+            "primary-fixed-dim": "#8387ff",
+            "on-secondary-container": "#d9c8ff",
+            "on-secondary-fixed-variant": "#5f28c8",
+            "on-error-container": "#ffb2b9",
+            "surface-variant": "#262528"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"],
+            "mono": ["JetBrains Mono"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { background-color: #0e0e10; color: #f9f5f8; font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #48474a33; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #48474a66; }
+  </style>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-64 border-r border-[#48474a]/15 bg-[#131315]/70 backdrop-blur-xl flex flex-col p-4 z-50">
+<div class="mb-10 flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-xl" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8]">RepoMind</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<button class="mb-8 w-full bg-surface-bright border border-outline-variant/15 text-on-surface py-2.5 rounded-md text-sm font-medium hover:bg-[#19191c] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+      Select Repository
+    </button>
+<nav class="flex-1 space-y-1 font-['Inter'] tracking-tight text-sm">
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        Dashboard
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+        Chat
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+        File Explorer
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+        Search
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+        Code Review
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="auto_fix_high">auto_fix_high</span>
+        Refactor
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+        Settings
+      </a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/15 pt-4 space-y-2">
+<div class="flex items-center gap-3 px-3 py-2 text-xs text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="dns">dns</span>
+        Health Status
+        <span class="ml-auto w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-xs text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="psychology">psychology</span>
+        Model Indicator
+        <span class="ml-auto font-mono text-[10px] text-primary">GPT-4o</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Stage -->
+<main class="flex-1 ml-64 flex flex-col h-screen relative bg-surface overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-14 bg-[#131315]/70 backdrop-blur-xl border-b border-[#48474a]/15 flex justify-between items-center px-6 z-40">
+<div class="flex items-center gap-4 text-sm font-['Inter']">
+<span class="text-on-surface-variant">Repositories</span>
+<span class="text-outline">/</span>
+<span class="text-[#f9f5f8] font-medium">repomind-core</span>
+<span class="text-outline">/</span>
+<span class="text-[#f9f5f8] font-medium">Search</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-[#f9f5f8] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close up professional headshot of a developer in a modern studio setting with soft cyan ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Szhf2cnRsWy46DcsPxjID2Fz2cn1FDaNpmU8qxDnHcKabMPNa8Nnj8X0MNVxf3TV5Wz7KuDnTknrjEcKgktv37koUI6sErSJLHzP0-3JJOxb7AQtgSIqz8OeydiClfUuR6QKnLQbuA53ka_OJlfq5pUilVg2R6KDvMlu2zkbbWKqon9253vctmZGcHzLp5AkNqCWo5uixj7ynBgQwtx9VhF3de_-BwrvkSzrgLk5rUpAQCdhnf9gjYI8cyMHHgnefZ90d4nrpQ"/>
+</div>
+</div>
+</header>
+<!-- Search Canvas -->
+<div class="flex-1 mt-14 overflow-y-auto custom-scrollbar">
+<div class="max-w-4xl mx-auto px-6 py-12">
+<!-- Search Head -->
+<div class="mb-12">
+<div class="flex flex-col gap-6">
+<div class="relative group">
+<div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</div>
+<input class="w-full h-[56px] pl-14 pr-4 bg-surface-container-low border border-outline-variant/15 rounded-xl text-on-surface placeholder-outline focus:ring-1 focus:ring-primary focus:border-primary/50 transition-all text-lg shadow-2xl shadow-black/50" placeholder="Search for code, concepts, or patterns..." type="text"/>
+<div class="absolute right-3 inset-y-0 flex items-center">
+<div class="flex p-1 bg-surface-container-highest rounded-lg border border-outline-variant/10">
+<button class="px-3 py-1.5 text-xs font-semibold rounded-md bg-primary text-on-primary transition-all">Semantic</button>
+<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-all">Keyword</button>
+<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-all">Hybrid</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State / Welcome Screen (Shown initially) -->
+<!-- Hidden if results are active -->
+<div class="space-y-16">
+<section>
+<h3 class="text-sm font-semibold text-outline uppercase tracking-widest mb-6 px-1">Recent Searches</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<button class="flex items-center gap-4 p-4 bg-surface-container hover:bg-surface-container-high border border-outline-variant/5 rounded-xl transition-all text-left group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="history">history</span>
+<span class="text-on-surface flex-1">implement jwt middleware</span>
+<span class="text-xs text-outline font-mono">2h ago</span>
+</button>
+<button class="flex items-center gap-4 p-4 bg-surface-container hover:bg-surface-container-high border border-outline-variant/5 rounded-xl transition-all text-left group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="history">history</span>
+<span class="text-on-surface flex-1">query optimization postgres</span>
+<span class="text-xs text-outline font-mono">Yesterday</span>
+</button>
+</div>
+</section>
+<section>
+<h3 class="text-sm font-semibold text-outline uppercase tracking-widest mb-6 px-1">Search Tips</h3>
+<div class="grid grid-cols-1 gap-6">
+<div class="flex items-start gap-4 p-6 bg-surface-container-low border-l-2 border-primary/40 rounded-r-xl">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="lightbulb">lightbulb</span>
+</div>
+<div>
+<h4 class="text-on-surface font-medium mb-1">Semantic Search</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Describe what you want to find in plain English. For example, "find where the database connection is initialized" or "how do we handle error logging".</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-6 bg-surface-container-low border-l-2 border-secondary/40 rounded-r-xl">
+<div class="p-2 bg-secondary/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="code">code</span>
+</div>
+<div>
+<h4 class="text-on-surface font-medium mb-1">Scope Filtering</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Narrow down results using filters like <code class="bg-surface-container text-primary-dim px-1.5 py-0.5 rounded text-xs">path:src/api</code> or <code class="bg-surface-container text-primary-dim px-1.5 py-0.5 rounded text-xs">lang:typescript</code>.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Results Section (Visible when searching) -->
+<div class="mt-8 space-y-6 hidden"> <!-- Toggle hidden to show results -->
+<div class="flex items-center justify-between border-b border-outline-variant/10 pb-4">
+<div class="flex items-center gap-2">
+<span class="text-lg font-semibold text-on-surface">12 Results</span>
+<span class="text-sm text-outline">for "auth validation"</span>
+</div>
+<div class="flex items-center gap-3">
+<label class="text-xs text-outline font-medium">SORT BY</label>
+<select class="bg-transparent border-none text-xs font-semibold text-primary focus:ring-0 cursor-pointer">
+<option>Relevance</option>
+<option>Recently Modified</option>
+<option>File Name</option>
+</select>
+</div>
+</div>
+<!-- Result Card 1 -->
+<div class="group bg-surface-container border border-outline-variant/10 rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300">
+<div class="p-4 bg-surface-container-high/50 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="description">description</span>
+<span class="text-sm font-mono text-on-surface">src/lib/auth/validators.ts</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest rounded-full border border-outline-variant/10">
+<span class="text-[10px] text-outline uppercase tracking-wider font-bold">Relevance</span>
+<div class="flex gap-0.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+</div>
+</div>
+</div>
+<div class="p-0 bg-surface-container-lowest font-mono text-sm">
+<div class="grid grid-cols-[3rem_1fr] border-b border-outline-variant/5">
+<div class="bg-surface-container-low text-outline text-right pr-4 py-2 text-xs select-none">42</div>
+<div class="px-4 py-2 text-[#adaaad] whitespace-pre-wrap"><span class="text-error-dim">export const</span> <span class="text-primary">validateSession</span> = (token: <span class="text-tertiary-dim">string</span>) =&gt; {</div>
+</div>
+<div class="grid grid-cols-[3rem_1fr] border-b border-outline-variant/5 bg-primary/5">
+<div class="bg-primary/10 text-primary text-right pr-4 py-2 text-xs select-none">43</div>
+<div class="px-4 py-2 text-on-surface whitespace-pre-wrap"> <span class="text-error-dim">if</span> (!token) <span class="text-error-dim">throw new</span> Error(<span class="text-tertiary">"Missing auth token"</span>);</div>
+</div>
+<div class="grid grid-cols-[3rem_1fr]">
+<div class="bg-surface-container-low text-outline text-right pr-4 py-2 text-xs select-none">44</div>
+<div class="px-4 py-2 text-[#adaaad] whitespace-pre-wrap"> <span class="text-on-surface-variant">// Check expiration and structure</span></div>
+</div>
+</div>
+<div class="p-4 flex items-center gap-3 border-t border-outline-variant/10">
+<button class="flex-1 bg-primary/10 text-primary hover:bg-primary text-on-primary-fixed-variant hover:text-on-primary h-9 rounded text-xs font-semibold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                Open in Viewer
+              </button>
+<button class="flex-1 bg-surface-bright text-on-surface border border-outline-variant/20 hover:border-primary/50 h-9 rounded text-xs font-semibold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="forum">forum</span>
+                Ask about this
+              </button>
+</div>
+</div>
+<!-- Result Card 2 -->
+<div class="group bg-surface-container border border-outline-variant/10 rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300">
+<div class="p-4 bg-surface-container-high/50 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="description">description</span>
+<span class="text-sm font-mono text-on-surface">src/middleware/auth.ts</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest rounded-full border border-outline-variant/10">
+<span class="text-[10px] text-outline uppercase tracking-wider font-bold">Relevance</span>
+<div class="flex gap-0.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+</div>
+</div>
+</div>
+<div class="p-0 bg-surface-container-lowest font-mono text-sm">
+<div class="grid grid-cols-[3rem_1fr] border-b border-outline-variant/5">
+<div class="bg-surface-container-low text-outline text-right pr-4 py-2 text-xs select-none">10</div>
+<div class="px-4 py-2 text-[#adaaad] whitespace-pre-wrap"><span class="text-on-surface-variant">// Middleware for route protection</span></div>
+</div>
+<div class="grid grid-cols-[3rem_1fr] border-b border-outline-variant/5 bg-primary/5">
+<div class="bg-primary/10 text-primary text-right pr-4 py-2 text-xs select-none">11</div>
+<div class="px-4 py-2 text-on-surface whitespace-pre-wrap"><span class="text-error-dim">const</span> <span class="text-primary">authGuard</span> = async (req, res, next) =&gt; {</div>
+</div>
+</div>
+<div class="p-4 flex items-center gap-3 border-t border-outline-variant/10">
+<button class="flex-1 bg-primary/10 text-primary hover:bg-primary text-on-primary-fixed-variant hover:text-on-primary h-9 rounded text-xs font-semibold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                Open in Viewer
+              </button>
+<button class="flex-1 bg-surface-bright text-on-surface border border-outline-variant/20 hover:border-primary/50 h-9 rounded text-xs font-semibold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="forum">forum</span>
+                Ask about this
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Utility / Quick Filter -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="group p-4 bg-gradient-to-tr from-primary to-secondary rounded-full shadow-2xl shadow-indigo-900/40 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-primary text-2xl" data-icon="filter_list">filter_list</span>
+<span class="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-surface-container-highest border border-outline-variant/20 rounded-md text-xs font-medium text-on-surface opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Advanced Filters</span>
+</button>
+</div>
+</body></html>

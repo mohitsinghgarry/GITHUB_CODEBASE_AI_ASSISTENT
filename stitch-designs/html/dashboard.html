@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#131315",
+                    "on-primary-fixed-variant": "#0e009d",
+                    "secondary-dim": "#8455ef",
+                    "on-background": "#f9f5f8",
+                    "secondary-fixed-dim": "#ceb9ff",
+                    "secondary-container": "#5516be",
+                    "surface-container": "#19191c",
+                    "outline": "#767577",
+                    "tertiary-fixed": "#69f6b8",
+                    "primary-container": "#9396ff",
+                    "error-dim": "#d73357",
+                    "on-tertiary-fixed": "#00452d",
+                    "surface-tint": "#a3a6ff",
+                    "inverse-surface": "#fcf8fb",
+                    "surface-bright": "#2c2c2f",
+                    "on-surface-variant": "#adaaad",
+                    "tertiary-fixed-dim": "#58e7ab",
+                    "on-secondary-fixed": "#40009b",
+                    "primary-fixed": "#9396ff",
+                    "on-tertiary": "#006443",
+                    "on-error": "#490013",
+                    "surface-container-lowest": "#000000",
+                    "on-tertiary-container": "#005a3c",
+                    "inverse-on-surface": "#565557",
+                    "tertiary-dim": "#58e7ab",
+                    "on-secondary": "#280067",
+                    "primary": "#a3a6ff",
+                    "tertiary-container": "#69f6b8",
+                    "on-surface": "#f9f5f8",
+                    "surface-container-highest": "#262528",
+                    "surface-dim": "#0e0e10",
+                    "primary-dim": "#6063ee",
+                    "secondary-fixed": "#dac9ff",
+                    "inverse-primary": "#494bd7",
+                    "error-container": "#a70138",
+                    "tertiary": "#9bffce",
+                    "error": "#ff6e84",
+                    "on-primary": "#0f00a4",
+                    "on-tertiary-fixed-variant": "#006544",
+                    "background": "#0e0e10",
+                    "on-primary-container": "#0a0081",
+                    "surface-container-high": "#1f1f22",
+                    "on-primary-fixed": "#000000",
+                    "outline-variant": "#48474a",
+                    "surface": "#0e0e10",
+                    "secondary": "#ac8aff",
+                    "primary-fixed-dim": "#8387ff",
+                    "on-secondary-container": "#d9c8ff",
+                    "on-secondary-fixed-variant": "#5f28c8",
+                    "on-error-container": "#ffb2b9",
+                    "surface-variant": "#262528"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(25, 25, 28, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0e10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262528;
+            border-radius: 10px;
+        }
+        .gradient-pulse {
+            background: linear-gradient(135deg, #a3a6ff 0%, #ac8aff 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 border-r border-outline-variant/15 flex flex-col p-4 bg-[#131315]/70 backdrop-blur-xl z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="w-8 h-8 gradient-pulse rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8] leading-none">RepoMind</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline mt-1 font-bold">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="px-2 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-['Inter'] tracking-tight">Dashboard</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="forum">forum</span>
+<span class="text-sm font-['Inter'] tracking-tight">Chat</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="folder_open">folder_open</span>
+<span class="text-sm font-['Inter'] tracking-tight">File Explorer</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+<span class="text-sm font-['Inter'] tracking-tight">Search</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="terminal">terminal</span>
+<span class="text-sm font-['Inter'] tracking-tight">Code Review</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="auto_fix_high">auto_fix_high</span>
+<span class="text-sm font-['Inter'] tracking-tight">Refactor</span>
+</div>
+<div class="px-2 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] rounded-md flex items-center gap-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="text-sm font-['Inter'] tracking-tight">Settings</span>
+</div>
+</nav>
+<div class="mt-auto pt-6 space-y-4">
+<button class="w-full py-2.5 gradient-pulse text-on-primary font-semibold text-xs rounded-lg active:scale-95 transition-transform">
+                Select Repository
+            </button>
+<div class="space-y-2">
+<div class="px-2 flex items-center gap-3 text-[#adaaad]">
+<span class="material-symbols-outlined text-lg" data-icon="dns">dns</span>
+<span class="text-sm font-['Inter'] tracking-tight">Health Status</span>
+</div>
+<div class="px-2 flex items-center gap-3 text-[#adaaad]">
+<span class="material-symbols-outlined text-lg" data-icon="psychology">psychology</span>
+<span class="text-sm font-['Inter'] tracking-tight">Model Indicator</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 h-14 w-full flex items-center justify-between px-8 bg-[#131315]/70 backdrop-blur-xl border-b border-[#48474a]/15 z-40">
+<div class="flex items-center gap-4">
+<nav class="flex text-sm">
+<span class="text-[#adaaad]">Projects</span>
+<span class="mx-2 text-outline">/</span>
+<span class="text-[#f9f5f8] font-medium">repomind-core-engine</span>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-md pl-10 pr-4 py-1.5 text-sm text-on-surface placeholder-outline w-64 focus:ring-1 focus:ring-primary-dim transition-all" placeholder="Search across files..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#adaaad] hover:text-[#f9f5f8] transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-background"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high ring-1 ring-outline-variant/30">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="minimalist avatar of a male developer with glasses and dark hair on a soft purple background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7Dznb782Ic1ztCSP8ewCQ-uufrsHJ7u_gvI6_BpSUVTyZxgJO5ogmdgntfyvWPpq_dd9gmeY3YK_ZWIXQnB5g1piEori1ZkDojcJeNEr2c2MbUX8_RDnf5KRI6J1b2zTr9i8jlVZv-VvqcFTX5bsYdpaVMNY7u19KT_1Xx_F_3WdUFv0BAXJw0aCBCCCm7MpFgFRY7qOvWBSzSg0mNAd13XQBKHdQ6qStoPsn0BpfPmZesSQNdhyUJBLBIJBn3gCw59bti6lzUQ"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-8 max-w-7xl mx-auto w-full">
+<!-- Repository Identity Bar -->
+<section class="flex items-end justify-between mb-12">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-surface-container-high rounded-xl flex items-center justify-center border border-outline-variant/15">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<div class="flex items-center gap-3">
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface">repomind-core-engine</h2>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/10 border border-tertiary-container/20 text-tertiary text-[10px] font-bold uppercase tracking-widest">Ready</span>
+</div>
+<p class="text-on-surface-variant mt-1">Last indexed 14 minutes ago • <span class="font-mono text-primary-dim">main branch</span></p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-bright text-on-surface text-sm font-semibold rounded-md flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+                        Re-index
+                    </button>
+<button class="px-6 py-2 gradient-pulse text-on-primary text-sm font-bold rounded-md active:scale-95 transition-transform">
+                        Chat with Repo
+                    </button>
+</div>
+</section>
+<!-- Bento Stats Row -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Total Files</p>
+<p class="text-3xl font-bold text-on-surface">12,482</p>
+<div class="mt-4 flex items-center gap-2 text-xs text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+124 since yesterday</span>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Total Chunks</p>
+<p class="text-3xl font-bold text-on-surface">84.2k</p>
+<div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="database">database</span>
+<span>Vector embeddings</span>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Languages</p>
+<p class="text-3xl font-bold text-on-surface">8</p>
+<div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="code">code</span>
+<span>Predominantly TS</span>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Index Health</p>
+<p class="text-3xl font-bold text-tertiary">99.4%</p>
+<div class="mt-4 flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="bolt">bolt</span>
+<span>Optimized for GPT-4o</span>
+</div>
+</div>
+</section>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+<!-- Left: Quick Actions & Language Breakdown -->
+<div class="lg:col-span-1 space-y-8">
+<!-- Quick Actions -->
+<div class="space-y-4">
+<h3 class="text-sm font-bold text-on-surface uppercase tracking-widest flex items-center gap-2">
+<span class="w-1 h-4 bg-primary rounded-full"></span>
+                            Quick Actions
+                        </h3>
+<div class="grid grid-cols-1 gap-2">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container rounded-lg group hover:bg-surface-container-high transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="chat_bubble">chat_bubble</span>
+<span class="text-sm font-medium">Ask a question</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 bg-surface-container rounded-lg group hover:bg-surface-container-high transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="search">search</span>
+<span class="text-sm font-medium">Search code</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 bg-surface-container rounded-lg group hover:bg-surface-container-high transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="folder_zip">folder_zip</span>
+<span class="text-sm font-medium">Browse files</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Language Breakdown -->
+<div class="p-8 rounded-2xl bg-surface-container border border-outline-variant/10">
+<h3 class="text-sm font-bold text-on-surface uppercase tracking-widest mb-6">Language Breakdown</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-mono text-on-surface">TypeScript</span>
+<span class="text-on-surface-variant">64%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 64%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-mono text-on-surface">Rust</span>
+<span class="text-on-surface-variant">22%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 22%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-mono text-on-surface">Python</span>
+<span class="text-on-surface-variant">10%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 10%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs mb-1">
+<span class="font-mono text-on-surface">Others</span>
+<span class="text-on-surface-variant">4%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-outline rounded-full" style="width: 4%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Recent Activity Feed -->
+<div class="lg:col-span-2">
+<div class="bg-surface-container border border-outline-variant/10 rounded-2xl overflow-hidden">
+<div class="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="text-sm font-bold text-on-surface uppercase tracking-widest">Recent Activity</h3>
+<button class="text-xs font-semibold text-primary-dim hover:text-primary transition-colors">View All Queries</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] uppercase tracking-widest text-outline border-b border-outline-variant/5">
+<th class="px-8 py-4 font-bold">Query Topic</th>
+<th class="px-8 py-4 font-bold">Confidence</th>
+<th class="px-8 py-4 font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-8 py-5">
+<div>
+<p class="text-sm font-medium text-on-surface">Explain the message broker architecture</p>
+<p class="text-xs text-on-surface-variant mt-1">Asked by Felix • 2 hours ago</p>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-mono">High (98%)</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="px-3 py-1.5 rounded bg-surface-bright text-xs font-bold hover:bg-surface-container-highest transition-colors active:scale-95">Re-open</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div>
+<p class="text-sm font-medium text-on-surface">Refactor the auth middleware for edge compatibility</p>
+<p class="text-xs text-on-surface-variant mt-1">Asked by Sarah • 5 hours ago</p>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-mono">High (94%)</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="px-3 py-1.5 rounded bg-surface-bright text-xs font-bold hover:bg-surface-container-highest transition-colors active:scale-95">Re-open</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div>
+<p class="text-sm font-medium text-on-surface">Where is the rate limiting logic implemented?</p>
+<p class="text-xs text-on-surface-variant mt-1">Asked by Felix • Yesterday</p>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="text-xs font-mono">Med (82%)</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="px-3 py-1.5 rounded bg-surface-bright text-xs font-bold hover:bg-surface-container-highest transition-colors active:scale-95">Re-open</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div>
+<p class="text-sm font-medium text-on-surface">Trace data flow from API to PostgreSQL</p>
+<p class="text-xs text-on-surface-variant mt-1">Asked by Jenkins-Bot • 2 days ago</p>
+</div>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-mono">High (91%)</span>
+</div>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="px-3 py-1.5 rounded bg-surface-bright text-xs font-bold hover:bg-surface-container-highest transition-colors active:scale-95">Re-open</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low flex justify-center">
+<p class="text-xs text-outline italic">Showing latest 4 transactions. Your query history is encrypted.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

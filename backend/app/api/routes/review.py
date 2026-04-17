@@ -31,6 +31,7 @@ from app.models.schemas.code import (
     ErrorResponse,
 )
 from app.services.llm_service import LLMService, OllamaConnectionError
+from app.services.groq_llm_service import create_llm_service
 from app.services.review_service import ReviewService
 
 # Configure logging
@@ -52,7 +53,7 @@ async def get_review_service() -> ReviewService:
     Returns:
         ReviewService: Initialized review service instance
     """
-    llm_service = LLMService()
+    llm_service = create_llm_service()
     return ReviewService(llm_service=llm_service)
 
 

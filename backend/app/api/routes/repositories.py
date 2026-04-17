@@ -218,9 +218,28 @@ async def create_repository(
         
         logger.info(f"Created ingestion job: {job.id} for repository {repository.id}")
         
-        # TODO: Enqueue Celery task for background ingestion
-        # from app.jobs.tasks.ingestion_task import ingest_repository
-        # ingest_repository.delay(str(repository.id), str(job.id))
+        # Start ingestion pipeline by triggering Celery tasks directly
+        try:
+            # Import here to avoid circular dependency
+            from app.jobs.tasks.ingestion_tasks import create_ingestion_pipeline
+            
+            # Create Celery task chain
+            pipeline = create_ingestion_pipeline(
+                repository_id=str(repository.id),
+                repository_url=request.url,
+                job_id=str(job.id),
+                auth_token=None,  # TODO: Add auth token support
+                ssh_key_path=None,
+            )
+            
+            # Trigger the pipeline asynchronously
+            logger.info(f"About to queue Celery pipeline for job {job.id}")
+            result = pipeline.apply_async(queue='ingestion')
+            celery_task_id = result.id
+            logger.info(f"Started Celery pipeline {celery_task_id} for job {job.id}")
+        except Exception as e:
+            logger.error(f"Failed to start ingestion pipeline: {e}", exc_info=True)
+            # Don't fail the request, job is already created
         
         return RepositoryCreateResponse(
             repository=RepositorySchema.model_validate(repository),
@@ -284,12 +303,42 @@ async def list_repositories(
         count_result = await db.execute(select(func.count(Repository.id)))
         total = count_result.scalar_one()
         
+        # Calculate total_files and total_chunks for each repository
+        repo_schemas = []
+        for repo in repositories:
+            # Query to get distinct file count and total chunks
+            stats_result = await db.execute(
+                select(
+                    func.count(func.distinct(CodeChunk.file_path)).label('total_files'),
+                    func.count(CodeChunk.id).label('total_chunks')
+                ).where(CodeChunk.repository_id == repo.id)
+            )
+            stats = stats_result.one()
+            
+            # Convert to schema and add calculated fields
+            repo_dict = {
+                "id": repo.id,
+                "url": repo.url,
+                "owner": repo.owner,
+                "name": repo.name,
+                "default_branch": repo.default_branch,
+                "last_commit_hash": repo.last_commit_hash,
+                "status": repo.status,
+                "created_at": repo.created_at,
+                "updated_at": repo.updated_at,
+                "error_message": repo.error_message,
+                "chunk_count": repo.chunk_count,
+                "index_path": repo.index_path,
+                "total_files": stats.total_files,
+                "total_chunks": stats.total_chunks,
+                "indexed_at": repo.updated_at if repo.status == "completed" else None,
+            }
+            repo_schemas.append(RepositorySchema(**repo_dict))
+        
         logger.info(f"Retrieved {total} repositories")
         
         return RepositoryListResponse(
-            repositories=[
-                RepositorySchema.model_validate(repo) for repo in repositories
-            ],
+            repositories=repo_schemas,
             total=total
         )
         
@@ -300,6 +349,66 @@ async def list_repositories(
             detail={
                 "error": "Internal server error",
                 "message": "An unexpected error occurred while retrieving repositories",
+                "details": None
+            }
+        )
+
+
+@router.get(
+    "/stats/languages",
+    summary="Get language statistics",
+    description="Retrieve language breakdown statistics across all repositories.",
+    responses={
+        200: {"description": "Language statistics retrieved successfully"},
+        500: {"model": ErrorResponse, "description": "Internal server error"},
+    }
+)
+async def get_language_stats(
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get language statistics across all repositories.
+    
+    Returns the distribution of programming languages based on code chunks.
+    """
+    try:
+        # Query language statistics
+        result = await db.execute(
+            select(
+                CodeChunk.language,
+                func.count(CodeChunk.id).label('chunk_count')
+            ).group_by(CodeChunk.language).order_by(func.count(CodeChunk.id).desc())
+        )
+        
+        language_stats = result.all()
+        
+        # Calculate total chunks
+        total_chunks = sum(stat.chunk_count for stat in language_stats)
+        
+        # Format response with percentages
+        languages = []
+        for stat in language_stats:
+            percentage = (stat.chunk_count / total_chunks * 100) if total_chunks > 0 else 0
+            languages.append({
+                "name": stat.language.title() if stat.language else "Unknown",
+                "chunk_count": stat.chunk_count,
+                "percentage": round(percentage, 1)
+            })
+        
+        logger.info(f"Retrieved language statistics: {len(languages)} languages")
+        
+        return {
+            "languages": languages,
+            "total_chunks": total_chunks
+        }
+        
+    except Exception as e:
+        logger.error(f"Error retrieving language statistics: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "error": "Internal server error",
+                "message": "An unexpected error occurred while retrieving language statistics",
                 "details": None
             }
         )
@@ -350,9 +459,37 @@ async def get_repository(
                 }
             )
         
+        # Calculate total_files and total_chunks
+        stats_result = await db.execute(
+            select(
+                func.count(func.distinct(CodeChunk.file_path)).label('total_files'),
+                func.count(CodeChunk.id).label('total_chunks')
+            ).where(CodeChunk.repository_id == repository_id)
+        )
+        stats = stats_result.one()
+        
+        # Convert to schema and add calculated fields
+        repo_dict = {
+            "id": repository.id,
+            "url": repository.url,
+            "owner": repository.owner,
+            "name": repository.name,
+            "default_branch": repository.default_branch,
+            "last_commit_hash": repository.last_commit_hash,
+            "status": repository.status,
+            "created_at": repository.created_at,
+            "updated_at": repository.updated_at,
+            "error_message": repository.error_message,
+            "chunk_count": repository.chunk_count,
+            "index_path": repository.index_path,
+            "total_files": stats.total_files,
+            "total_chunks": stats.total_chunks,
+            "indexed_at": repository.updated_at if repository.status == "completed" else None,
+        }
+        
         logger.info(f"Retrieved repository: {repository.id} ({repository.owner}/{repository.name})")
         
-        return RepositorySchema.model_validate(repository)
+        return RepositorySchema(**repo_dict)
         
     except HTTPException:
         raise
@@ -558,4 +695,107 @@ async def reindex_repository(
                 "message": "An unexpected error occurred while creating the re-indexing job",
                 "details": None
             }
+        )
+
+
+@router.get(
+    "/{repository_id}/files",
+    summary="List all files in a repository",
+    description="Retrieve all unique file paths and their languages from a repository.",
+)
+async def list_repository_files(
+    repository_id: UUID,
+    language: str = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    List all files in a repository with language info.
+    Optionally filter by language.
+    """
+    try:
+        query = select(
+            CodeChunk.file_path,
+            CodeChunk.language,
+            func.min(CodeChunk.start_line).label('start_line'),
+            func.max(CodeChunk.end_line).label('end_line'),
+            func.count(CodeChunk.id).label('chunk_count'),
+        ).where(CodeChunk.repository_id == repository_id)
+
+        if language:
+            query = query.where(CodeChunk.language == language.lower())
+
+        query = query.group_by(CodeChunk.file_path, CodeChunk.language).order_by(CodeChunk.file_path)
+
+        result = await db.execute(query)
+        files = result.all()
+
+        return {
+            "files": [
+                {
+                    "file_path": f.file_path,
+                    "language": f.language,
+                    "start_line": f.start_line,
+                    "end_line": f.end_line,
+                    "chunk_count": f.chunk_count,
+                }
+                for f in files
+            ],
+            "total": len(files),
+        }
+
+    except Exception as e:
+        logger.error(f"Error listing files for repository {repository_id}: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={"error": "Internal server error", "message": str(e)}
+        )
+
+
+@router.get(
+    "/{repository_id}/files/content",
+    summary="Get file content from a repository",
+    description="Retrieve all code chunks for a specific file path, assembled in order.",
+)
+async def get_file_content(
+    repository_id: UUID,
+    file_path: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Get the full content of a file by assembling its chunks in order.
+    """
+    try:
+        result = await db.execute(
+            select(CodeChunk)
+            .where(
+                CodeChunk.repository_id == repository_id,
+                CodeChunk.file_path == file_path,
+            )
+            .order_by(CodeChunk.start_line)
+        )
+        chunks = result.scalars().all()
+
+        if not chunks:
+            raise HTTPException(status_code=404, detail={"error": "File not found"})
+
+        # Assemble content from chunks
+        full_content = "\n".join(chunk.content for chunk in chunks)
+        language = chunks[0].language if chunks else None
+
+        return {
+            "file_path": file_path,
+            "language": language,
+            "content": full_content,
+            "start_line": chunks[0].start_line,
+            "end_line": chunks[-1].end_line,
+            "chunk_count": len(chunks),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting file content: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={"error": "Internal server error", "message": str(e)}
         )

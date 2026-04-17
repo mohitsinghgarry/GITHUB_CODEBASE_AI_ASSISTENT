@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RepoMind - AI Dev Intelligence Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#131315",
+                        "on-primary-fixed-variant": "#0e009d",
+                        "secondary-dim": "#8455ef",
+                        "on-background": "#f9f5f8",
+                        "secondary-fixed-dim": "#ceb9ff",
+                        "secondary-container": "#5516be",
+                        "surface-container": "#19191c",
+                        "outline": "#767577",
+                        "tertiary-fixed": "#69f6b8",
+                        "primary-container": "#9396ff",
+                        "error-dim": "#d73357",
+                        "on-tertiary-fixed": "#00452d",
+                        "surface-tint": "#a3a6ff",
+                        "inverse-surface": "#fcf8fb",
+                        "surface-bright": "#2c2c2f",
+                        "on-surface-variant": "#adaaad",
+                        "tertiary-fixed-dim": "#58e7ab",
+                        "on-secondary-fixed": "#40009b",
+                        "primary-fixed": "#9396ff",
+                        "on-tertiary": "#006443",
+                        "on-error": "#490013",
+                        "surface-container-lowest": "#000000",
+                        "on-tertiary-container": "#005a3c",
+                        "inverse-on-surface": "#565557",
+                        "tertiary-dim": "#58e7ab",
+                        "on-secondary": "#280067",
+                        "primary": "#a3a6ff",
+                        "tertiary-container": "#69f6b8",
+                        "on-surface": "#f9f5f8",
+                        "surface-container-highest": "#262528",
+                        "surface-dim": "#0e0e10",
+                        "primary-dim": "#6063ee",
+                        "secondary-fixed": "#dac9ff",
+                        "inverse-primary": "#494bd7",
+                        "error-container": "#a70138",
+                        "tertiary": "#9bffce",
+                        "error": "#ff6e84",
+                        "on-primary": "#0f00a4",
+                        "on-tertiary-fixed-variant": "#006544",
+                        "background": "#0e0e10",
+                        "on-primary-container": "#0a0081",
+                        "surface-container-high": "#1f1f22",
+                        "on-primary-fixed": "#000000",
+                        "outline-variant": "#48474a",
+                        "surface": "#0e0e10",
+                        "secondary": "#ac8aff",
+                        "primary-fixed-dim": "#8387ff",
+                        "on-secondary-container": "#d9c8ff",
+                        "on-secondary-fixed-variant": "#5f28c8",
+                        "on-error-container": "#ffb2b9",
+                        "surface-variant": "#262528"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #48474a33; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #48474a66; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="bg-[#131315]/70 backdrop-blur-xl docked left-0 h-screen w-64 border-r border-[#48474a]/15 font-['Inter'] tracking-tight text-sm flex flex-col h-full p-4 z-50">
+<div class="flex items-center gap-3 px-2 mb-8">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-lg" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8] leading-none">RepoMind</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">AI Dev Intelligence</p>
+</div>
+</div>
+<button class="w-full py-2 px-4 mb-6 bg-surface-container-high hover:bg-[#19191c] text-on-surface border border-outline-variant/15 rounded-md flex items-center justify-between transition-all duration-300">
+<span class="truncate">Select Repository</span>
+<span class="material-symbols-outlined text-xs">unfold_more</span>
+</button>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined text-[20px]">forum</span>
+                Chat
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+                File Explorer
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">search</span>
+                Search
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+                Code Review
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+                Refactor
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-[#48474a]/15 space-y-1">
+<div class="flex items-center justify-between px-3 py-2 text-[#adaaad]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">dns</span>
+<span class="text-xs">Health Status</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+</div>
+<div class="flex items-center justify-between px-3 py-2 text-[#adaaad]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+<span class="text-xs">Model Indicator</span>
+</div>
+<span class="text-[10px] bg-primary-container/20 text-primary px-1.5 py-0.5 rounded uppercase font-bold tracking-tighter">GPT-4o</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative bg-surface">
+<!-- TopNavBar Component -->
+<header class="bg-[#131315]/70 backdrop-blur-xl docked top-0 w-full h-14 border-b border-[#48474a]/15 flex justify-between items-center px-6 z-40">
+<div class="flex items-center gap-4 text-sm">
+<span class="text-[#adaaad]">Repositories</span>
+<span class="text-outline-variant">/</span>
+<span class="text-[#f9f5f8] font-medium">repomind-core</span>
+<span class="text-outline-variant">/</span>
+<span class="text-[#adaaad]">chat</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-1.5 rounded-md text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-7 h-7 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="User Profile" data-alt="close up headshot profile picture of a professional developer in soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqnajJvbfxwNR8zWS83zkp4JQ-8dYool37ACW0qHSU1nvXn7egYFXlRF6w-fOrrKWGBY1AZWkzcfE44dWE-LD7CbKdK4UuHImx_on5lAw671QHeQ4hZrd-A2EZGu8gU8ToLVi3KceIkVm2pa8LGh5t3V3EN_gL7eFClqTKwXsUrxfTkoC_Z3xXLzrmHW4IX0k9zjlUAzzu7uQhLQzYDMJ6GjHUHUyLMcV7urUMW00hAvTH7nwn5W3-ztzFdASGzjJQEJ_YEcSvFg"/>
+</div>
+</div>
+</header>
+<!-- Chat Container -->
+<div class="flex-1 overflow-y-auto px-12 py-8 flex flex-col gap-12 max-w-4xl mx-auto w-full">
+<!-- Assistant Message -->
+<div class="flex gap-6 group">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex-shrink-0 flex items-center justify-center border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex-1 space-y-4">
+<div class="text-on-surface leading-relaxed">
+                        I've analyzed the <span class="text-secondary font-medium">AuthMiddleware.ts</span>. The main bottleneck for the slow token validation seems to be the synchronous call to the key store. I recommend switching to an async caching strategy.
+                    </div>
+<!-- Code Block -->
+<div class="rounded-lg overflow-hidden border border-outline-variant/15 bg-surface-container-lowest">
+<div class="flex items-center justify-between px-4 py-2 bg-surface-container-low border-b border-outline-variant/10">
+<span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-widest">AuthMiddleware.ts • Refactored</span>
+<button class="flex items-center gap-1.5 text-[11px] font-medium text-primary hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+                                Open in Viewer
+                            </button>
+</div>
+<div class="p-4 font-mono text-sm leading-relaxed overflow-x-auto text-[#e0e0e0]">
+<div class="flex gap-4">
+<span class="text-outline-variant/50 select-none text-right w-5">12</span>
+<span class="text-on-surface-variant">export const <span class="text-primary">validateSession</span> = <span class="text-secondary-dim">async</span> (req, res) =&gt; {</span>
+</div>
+<div class="flex gap-4 bg-primary/10 border-l-2 border-primary -ml-4 pl-3.5">
+<span class="text-outline-variant/50 select-none text-right w-5">13</span>
+<span class="text-on-surface"><span class="text-secondary-dim">const</span> token = <span class="text-secondary-dim">await</span> cache.get(req.headers.auth);</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant/50 select-none text-right w-5">14</span>
+<span class="text-on-surface-variant"><span class="text-secondary-dim">if</span> (!token) <span class="text-secondary-dim">return</span> <span class="text-tertiary">fetchFromSource</span>(req.headers.auth);</span>
+</div>
+</div>
+</div>
+<!-- Citations -->
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest block w-full mb-1">Sources</span>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-[11px] text-[#adaaad] border border-outline-variant/10 hover:border-primary/30 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">description</span>
+                            AuthMiddleware.ts
+                        </div>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-[11px] text-[#adaaad] border border-outline-variant/10 hover:border-primary/30 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-xs">description</span>
+                            CacheConfig.ts:42
+                        </div>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-6 justify-end">
+<div class="flex-1 max-w-xl bg-surface-container-low p-4 rounded-xl border border-outline-variant/10 text-on-surface-variant leading-relaxed">
+                    That looks much cleaner. Can you also check if this change affects the <span class="text-primary">@RateLimiter</span> policy in the gateway?
+                </div>
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex-shrink-0 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-xl">person</span>
+</div>
+</div>
+<!-- Empty State / Suggestions (Visible when no chat yet, hidden here for demo context) -->
+<div class="mt-8 space-y-6 opacity-80">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-outline text-center">Contextual Starters</h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10 hover:border-primary/40 hover:bg-surface-container transition-all text-left group">
+<span class="material-symbols-outlined text-primary mb-3 block">architecture</span>
+<p class="text-sm font-medium text-on-surface mb-1">Explain Architecture</p>
+<p class="text-xs text-on-surface-variant">Summarize the core design patterns used in this repo.</p>
+</button>
+<button class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10 hover:border-primary/40 hover:bg-surface-container transition-all text-left group">
+<span class="material-symbols-outlined text-secondary mb-3 block">security</span>
+<p class="text-sm font-medium text-on-surface mb-1">Security Audit</p>
+<p class="text-xs text-on-surface-variant">Check for common vulnerabilities in the auth flow.</p>
+</button>
+</div>
+</div>
+</div>
+<!-- Chat Input Shell -->
+<div class="p-6 bg-surface border-t border-outline-variant/10">
+<div class="max-w-4xl mx-auto relative group">
+<div class="absolute -top-10 left-0 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-high border border-outline-variant/20 text-[10px] text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[10px]">attach_file</span>
+                        AuthMiddleware.ts
+                        <span class="material-symbols-outlined text-[10px] cursor-pointer hover:text-error">close</span>
+</span>
+</div>
+<div class="bg-surface-container-low rounded-xl border border-outline-variant/20 focus-within:border-primary/50 transition-all p-3">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline text-sm resize-none min-h-[80px]" placeholder="Ask anything about the codebase... Use @ to mention files"></textarea>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-outline-variant/5">
+<div class="flex gap-2">
+<button class="p-1.5 rounded text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">alternate_email</span>
+</button>
+<button class="p-1.5 rounded text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-lg">image</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[10px] text-outline uppercase tracking-widest">⌘ + Enter to send</span>
+<button class="px-4 py-1.5 rounded bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-xs flex items-center gap-2 hover:opacity-90 transition-opacity">
+                                SEND
+                                <span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Context Panel (Code View) -->
+<aside class="w-96 bg-surface-container-low border-l border-outline-variant/15 flex flex-col relative z-30 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
+<div class="h-14 border-b border-outline-variant/10 flex items-center justify-between px-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">code</span>
+<span class="text-xs font-bold uppercase tracking-widest text-[#f9f5f8]">Context: RateLimiter.ts</span>
+</div>
+<button class="p-1 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Code Content -->
+<div class="flex-1 bg-surface-container-lowest font-mono text-[12px] leading-relaxed p-0 overflow-y-auto">
+<div class="flex gap-4 px-4 py-1 hover:bg-surface-container transition-colors group">
+<span class="text-outline-variant/40 w-8 text-right select-none">1</span>
+<span class="text-on-surface-variant"><span class="text-secondary-dim">import</span> { Policy } <span class="text-secondary-dim">from</span> <span class="text-tertiary">'@core/limiter'</span>;</span>
+</div>
+<div class="flex gap-4 px-4 py-1 hover:bg-surface-container transition-colors group">
+<span class="text-outline-variant/40 w-8 text-right select-none">2</span>
+<span class="text-on-surface-variant"></span>
+</div>
+<div class="flex gap-4 px-4 py-1 hover:bg-surface-container transition-colors group">
+<span class="text-outline-variant/40 w-8 text-right select-none">3</span>
+<span class="text-on-surface-variant"><span class="text-secondary-dim">export const</span> RateLimiter = <span class="text-primary">new</span> Policy({</span>
+</div>
+<!-- Indigo Highlighted Line -->
+<div class="flex gap-4 px-4 py-1 bg-primary/10 border-l-2 border-primary group">
+<span class="text-primary w-8 text-right select-none font-bold">4</span>
+<span class="text-on-surface">  window: <span class="text-tertiary-dim">"60s"</span>,</span>
+</div>
+<div class="flex gap-4 px-4 py-1 bg-primary/10 border-l-2 border-primary group">
+<span class="text-primary w-8 text-right select-none font-bold">5</span>
+<span class="text-on-surface">  max: <span class="text-tertiary-dim">1000</span>,</span>
+</div>
+<div class="flex gap-4 px-4 py-1 hover:bg-surface-container transition-colors group">
+<span class="text-outline-variant/40 w-8 text-right select-none">6</span>
+<span class="text-on-surface-variant">  strategy: <span class="text-tertiary-dim">'sliding'</span>,</span>
+</div>
+<div class="flex gap-4 px-4 py-1 hover:bg-surface-container transition-colors group">
+<span class="text-outline-variant/40 w-8 text-right select-none">7</span>
+<span class="text-on-surface-variant">});</span>
+</div>
+<!-- More code for scroll -->
+<div class="flex gap-4 px-4 py-1 opacity-20"><span class="w-8"></span><span>...</span></div>
+<div class="flex gap-4 px-4 py-1 opacity-20"><span class="w-8"></span><span>...</span></div>
+<div class="flex gap-4 px-4 py-1 opacity-20"><span class="w-8"></span><span>...</span></div>
+</div>
+<!-- Floating Action in Context Panel -->
+<div class="p-4 border-t border-outline-variant/10 bg-surface-container-low">
+<button class="w-full py-2 rounded bg-surface-bright text-on-surface text-xs font-semibold flex items-center justify-center gap-2 border border-outline-variant/15 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">history</span>
+                View File History
+            </button>
+</div>
+</aside>
+</body></html>

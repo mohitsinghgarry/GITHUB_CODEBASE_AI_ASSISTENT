@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#131315",
+                        "on-primary-fixed-variant": "#0e009d",
+                        "secondary-dim": "#8455ef",
+                        "on-background": "#f9f5f8",
+                        "secondary-fixed-dim": "#ceb9ff",
+                        "secondary-container": "#5516be",
+                        "surface-container": "#19191c",
+                        "outline": "#767577",
+                        "tertiary-fixed": "#69f6b8",
+                        "primary-container": "#9396ff",
+                        "error-dim": "#d73357",
+                        "on-tertiary-fixed": "#00452d",
+                        "surface-tint": "#a3a6ff",
+                        "inverse-surface": "#fcf8fb",
+                        "surface-bright": "#2c2c2f",
+                        "on-surface-variant": "#adaaad",
+                        "tertiary-fixed-dim": "#58e7ab",
+                        "on-secondary-fixed": "#40009b",
+                        "primary-fixed": "#9396ff",
+                        "on-tertiary": "#006443",
+                        "on-error": "#490013",
+                        "surface-container-lowest": "#000000",
+                        "on-tertiary-container": "#005a3c",
+                        "inverse-on-surface": "#565557",
+                        "tertiary-dim": "#58e7ab",
+                        "on-secondary": "#280067",
+                        "primary": "#a3a6ff",
+                        "tertiary-container": "#69f6b8",
+                        "on-surface": "#f9f5f8",
+                        "surface-container-highest": "#262528",
+                        "surface-dim": "#0e0e10",
+                        "primary-dim": "#6063ee",
+                        "secondary-fixed": "#dac9ff",
+                        "inverse-primary": "#494bd7",
+                        "error-container": "#a70138",
+                        "tertiary": "#9bffce",
+                        "error": "#ff6e84",
+                        "on-primary": "#0f00a4",
+                        "on-tertiary-fixed-variant": "#006544",
+                        "background": "#0e0e10",
+                        "on-primary-container": "#0a0081",
+                        "surface-container-high": "#1f1f22",
+                        "on-primary-fixed": "#000000",
+                        "outline-variant": "#48474a",
+                        "surface": "#0e0e10",
+                        "secondary": "#ac8aff",
+                        "primary-fixed-dim": "#8387ff",
+                        "on-secondary-container": "#d9c8ff",
+                        "on-secondary-fixed-variant": "#5f28c8",
+                        "on-error-container": "#ffb2b9",
+                        "surface-variant": "#262528"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(19, 19, 21, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #a3a6ff 0%, #ac8aff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cubic-transition {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-outline-variant/15 h-14 flex items-center justify-between px-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl">psychology</span>
+</div>
+<span class="text-xl font-bold tracking-tighter text-on-surface">RepoMind</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-on-surface cubic-transition hover:text-primary" href="#">Breadcrumbs</a>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface cubic-transition">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close up professional headshot of a software engineer in soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlvTJRMxE1TuOtRBkochsLxLzRKRfoCS_knr1AmlS5O4m96taRhsSQU896-ow6eRq1BjHmJGpNq5z9W0eQr88rjx_4O74e8DxqUl4pEd6853F5LqZ81ZycbGmnQkbVsnSby89jefXXgqkOCJywoNBCTHAit1FodWQihfZ81HDej47Y-Sbq69G5fPSB0FwCvukDgRqvDlP8xHVtHisIHWOHSr_Soc2G06CqNCDWA2URmfxakWRRnwyPhUNb6uF8qNSUqvTYe8KwA"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex flex-col items-center justify-center pt-24 px-6 overflow-hidden">
+<!-- Ambient Background Pulse -->
+<div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="max-w-5xl w-full text-center space-y-8 relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-outline-variant/15">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">v2.0 Now Live</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.1]">
+<span class="text-gradient">Understand any GitHub repository</span> in seconds
+            </h1>
+<p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                RepoMind connects your codebase with advanced AI intelligence to provide instant architectural insights, bug detection, and documentation generation.
+            </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+<button class="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold rounded-lg shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all cubic-transition">
+                    Load a Repository
+                </button>
+<button class="px-8 py-3 bg-surface-bright text-on-surface font-semibold rounded-lg border border-outline-variant/15 hover:bg-surface-container-highest transition-colors cubic-transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+                    View on GitHub
+                </button>
+</div>
+</div>
+<!-- Live-looking Demo Mockup -->
+<div class="mt-20 w-full max-w-6xl mx-auto relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+<div class="relative bg-surface-container-lowest border border-outline-variant/15 rounded-xl shadow-2xl overflow-hidden aspect-video flex">
+<!-- Sidebar Mock -->
+<div class="w-16 border-r border-outline-variant/15 bg-surface-container-low flex flex-col items-center py-4 gap-6">
+<span class="material-symbols-outlined text-primary">dashboard</span>
+<span class="material-symbols-outlined text-on-surface-variant">folder_open</span>
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</div>
+<!-- Main Content Mock -->
+<div class="flex-1 flex flex-col">
+<div class="h-10 border-b border-outline-variant/15 bg-surface-container flex items-center px-4 justify-between">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-error-dim/50"></div>
+<div class="w-3 h-3 rounded-full bg-tertiary-dim/50"></div>
+<div class="w-3 h-3 rounded-full bg-primary-dim/50"></div>
+</div>
+<span class="text-[10px] font-mono text-outline uppercase tracking-widest">src/main.ts</span>
+</div>
+<div class="flex flex-1 overflow-hidden">
+<!-- Chat Column -->
+<div class="w-1/3 border-r border-outline-variant/15 p-4 space-y-4 bg-surface-container-low/50">
+<div class="p-3 rounded bg-surface-container border border-outline-variant/15">
+<p class="text-xs text-on-surface-variant font-mono">Analyze the authentication flow in this module.</p>
+</div>
+<div class="p-3 rounded bg-primary/10 border border-primary/20">
+<p class="text-xs text-on-surface font-mono">The authentication uses an OAuth2 provider via the `authService`. It validates JWT tokens on lines 42-58...</p>
+</div>
+</div>
+<!-- Code Column -->
+<div class="flex-1 p-6 font-mono text-xs bg-surface-container-lowest overflow-hidden">
+<div class="flex gap-4">
+<span class="text-outline">01</span>
+<span class="text-tertiary">import</span> <span class="text-on-surface">{ AuthService } from "./services";</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline">02</span>
+<span class="text-tertiary">import</span> <span class="text-on-surface">{ User } from "./models";</span>
+</div>
+<div class="flex gap-4 mt-2">
+<span class="text-outline">03</span>
+<span class="text-error-dim">export class</span> <span class="text-primary">AuthHandler</span> <span class="text-on-surface">{</span>
+</div>
+<div class="flex gap-4 pl-4">
+<span class="text-outline">04</span>
+<span class="text-on-surface-variant">private readonly service: AuthService;</span>
+</div>
+<div class="flex gap-4 pl-4 mt-2">
+<span class="text-outline">05</span>
+<span class="text-primary">async</span> <span class="text-tertiary">validate</span><span class="text-on-surface">(token: string) {</span>
+</div>
+<div class="flex gap-4 pl-8">
+<span class="text-outline">06</span>
+<span class="text-on-surface-variant">// AI Suggestion: Add error handling for expired tokens</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Feature Highlights Strip -->
+<section class="py-12 border-y border-outline-variant/15 bg-surface-container-low">
+<div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">search_spark</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Semantic Search</h3>
+<p class="text-sm text-on-surface-variant">Find logic, not just strings.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">forum</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">AI Chat</h3>
+<p class="text-sm text-on-surface-variant">Converse with your logic.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">terminal</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Code Review</h3>
+<p class="text-sm text-on-surface-variant">Automated architectural audits.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-32 bg-surface">
+<div class="max-w-6xl mx-auto px-6">
+<div class="text-center mb-24">
+<h2 class="text-4xl font-bold tracking-tight mb-4">Architecture to Insights</h2>
+<p class="text-on-surface-variant">A streamlined pipeline for repository intelligence.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1">
+<!-- Step 1 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/15 rounded-xl group hover:bg-surface-container cubic-transition">
+<div class="text-6xl font-black text-outline/10 mb-6 group-hover:text-primary/20 transition-colors">01</div>
+<h4 class="font-bold mb-2">Sync Repo</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Connect any public or private GitHub repository in one click.</p>
+</div>
+<!-- Step 2 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/15 rounded-xl group hover:bg-surface-container cubic-transition md:mt-8">
+<div class="text-6xl font-black text-outline/10 mb-6 group-hover:text-secondary/20 transition-colors">02</div>
+<h4 class="font-bold mb-2">AI Indexing</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Our models map dependencies and logic flows in minutes.</p>
+</div>
+<!-- Step 3 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/15 rounded-xl group hover:bg-surface-container cubic-transition">
+<div class="text-6xl font-black text-outline/10 mb-6 group-hover:text-tertiary/20 transition-colors">03</div>
+<h4 class="font-bold mb-2">Chat &amp; Query</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Ask questions like "Where is state managed?" or "Find vulnerabilities."</p>
+</div>
+<!-- Step 4 -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/15 rounded-xl group hover:bg-surface-container cubic-transition md:mt-8">
+<div class="text-6xl font-black text-outline/10 mb-6 group-hover:text-primary/20 transition-colors">04</div>
+<h4 class="font-bold mb-2">Ship Faster</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">Onboard developers in days, not weeks, with instant context.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Use Case Cards -->
+<section class="py-32 bg-surface-container-lowest">
+<div class="max-w-6xl mx-auto px-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+<div class="max-w-xl">
+<h2 class="text-4xl font-bold tracking-tight mb-4">Engineered for Dev Teams</h2>
+<p class="text-on-surface-variant leading-relaxed">RepoMind integrates seamlessly into your workflow, providing value from day one.</p>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 flex items-center justify-center rounded-full border border-outline-variant/15 hover:bg-surface-bright cubic-transition cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="w-12 h-12 flex items-center justify-center rounded-full border border-outline-variant/15 hover:bg-surface-bright cubic-transition cursor-pointer">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Case 1 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/40 transition-colors group">
+<img alt="Tech Onboarding" class="w-full h-40 object-cover rounded-lg mb-6 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="minimalist overhead shot of a clean developer workspace with a glowing laptop screen and soft ambient indigo lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU8ZE7US7_r4i98UdEAk5jeOafYdw2ZN7PdBdXnOmy_MwwAaVO6rHpcPfK8MQf7SM3iTQQGZVgczBzG5hpMEmIt6A_OlS-x754JUHrK83Ncerv9vJkBl8NPaJwSdmHOWsMPuJNVfL-jI6NtWNVF0UC9iEUwDoVfVT269-l0YOVW2BF1PGqz8_P-t1zKLXITf80I77xfad7gB_QxkSWw1x3jogRzP-N9oycCwaA2Rkij7RGHkwQdX0_VQ6QX8i2wkKbchLjAN0k3g"/>
+<h4 class="font-bold mb-2 text-on-surface">Developer Onboarding</h4>
+<p class="text-sm text-on-surface-variant">Let new hires explore the codebase through AI-guided tours instead of hunting through stale docs.</p>
+</div>
+<!-- Case 2 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-secondary/40 transition-colors group">
+<img alt="Code Refactor" class="w-full h-40 object-cover rounded-lg mb-6 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="abstract macro photography of digital data streams with purple and blue light trails on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8owLmw3kUxOKCopCMlHXk0j7VEh07IXrmPv0NKxMVal0bsmlA197W8gD7GkUpdsDpB1AnxGKWQGBFIj336SIMhMd_GGKtIbm8KS3P6GWgisb85ltbDC0lWrva7jc3bsEcte3v__jlR8RxooGsD7m3OEcX_TXAJ2BHE4SLfklPZyrwHaANzc0Y9AMR9GdmLlhiqdMT7TDi4MwKimL8aGgyYRNQpICoyhbPr7yNO7I3WijOAwVYtm8azhSO4_WPYZZgEXqlu7Lzug"/>
+<h4 class="font-bold mb-2 text-on-surface">Legacy Refactoring</h4>
+<p class="text-sm text-on-surface-variant">Map out complex monolithic structures and safely decouple services with automated impact analysis.</p>
+</div>
+<!-- Case 3 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-tertiary/40 transition-colors group">
+<img alt="Security Audit" class="w-full h-40 object-cover rounded-lg mb-6 grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="close-up of code lines on a high resolution screen with a futuristic green matrix aesthetic and soft glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoJ5bihS0l9bh7fLVzdy2aDUy9jmo4FIZtTZt6-S3Z7NeiQKZ9Cd3u9pqvZbf-6h3L8UZzq2QmKIaLb-QpQ3NYvD0iqVSG7CBoKH3ifpNzuMmFLd_irpjjLb6vH84vxxNfo4htSJmwGhyghmetufq1PBIAQAbeRHkYBtDIxqHokiFftL1HiNlYfKMGpuEgamlq5OEYwtU3TzHAbY2QyaaqHo8pUzimpBXQeruM40dSUavP5VhMua3wuMDo971kdfHjO2tx-L8Utg"/>
+<h4 class="font-bold mb-2 text-on-surface">Security Auditing</h4>
+<p class="text-sm text-on-surface-variant">Find logic vulnerabilities that traditional static analysis tools miss by understanding intent.</p>
+</div>
+<!-- Case 4 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-primary/40 transition-colors group">
+<div class="w-full h-40 bg-surface-container-highest rounded-lg mb-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">description</span>
+</div>
+<h4 class="font-bold mb-2 text-on-surface">Live Documentation</h4>
+<p class="text-sm text-on-surface-variant">Generate and maintain READMEs and internal wikis that update automatically as code changes.</p>
+</div>
+<!-- Case 5 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-secondary/40 transition-colors group">
+<div class="w-full h-40 bg-surface-container-highest rounded-lg mb-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">bug_report</span>
+</div>
+<h4 class="font-bold mb-2 text-on-surface">Bug Triage</h4>
+<p class="text-sm text-on-surface-variant">Paste a stack trace and let RepoMind locate the exact failure point and suggest a fix.</p>
+</div>
+<!-- Case 6 -->
+<div class="p-6 bg-surface-container rounded-xl border border-outline-variant/10 hover:border-tertiary/40 transition-colors group">
+<div class="w-full h-40 bg-surface-container-highest rounded-lg mb-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">account_tree</span>
+</div>
+<h4 class="font-bold mb-2 text-on-surface">Feature Scoping</h4>
+<p class="text-sm text-on-surface-variant">Predict how a new feature will affect your existing architecture before writing a single line of code.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/15 pt-24 pb-12">
+<div class="max-w-6xl mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-12 mb-20">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-6 h-6 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-sm">psychology</span>
+</div>
+<span class="text-lg font-bold tracking-tighter">RepoMind</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed max-w-xs">
+                        The intelligence layer for your development workflow. Built by developers, for the next generation of code.
+                    </p>
+</div>
+<div>
+<h5 class="text-[10px] uppercase tracking-[0.2em] font-bold text-outline mb-6">Product</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-[10px] uppercase tracking-[0.2em] font-bold text-outline mb-6">Company</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">About</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Changelog</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-[10px] uppercase tracking-[0.2em] font-bold text-outline mb-6">Social</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Twitter</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">GitHub</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Discord</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-outline">© 2024 RepoMind Intelligence Inc. All rights reserved.</p>
+<div class="flex items-center gap-6">
+<span class="text-xs text-tertiary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                        All Systems Operational
+                    </span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

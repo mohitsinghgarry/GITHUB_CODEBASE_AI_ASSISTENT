@@ -7,9 +7,12 @@ This module exports all SQLAlchemy ORM models.
 from app.models.orm.repository import Repository
 from app.models.orm.ingestion_job import IngestionJob
 from app.models.orm.code_chunk import CodeChunk
+from app.models.orm.chat_session import ChatSession, ChatMessage
 
 __all__ = [
     "Repository",
     "IngestionJob",
     "CodeChunk",
+    "ChatSession",
+    "ChatMessage",
 ]

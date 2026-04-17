@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#131315",
+            "on-primary-fixed-variant": "#0e009d",
+            "secondary-dim": "#8455ef",
+            "on-background": "#f9f5f8",
+            "secondary-fixed-dim": "#ceb9ff",
+            "secondary-container": "#5516be",
+            "surface-container": "#19191c",
+            "outline": "#767577",
+            "tertiary-fixed": "#69f6b8",
+            "primary-container": "#9396ff",
+            "error-dim": "#d73357",
+            "on-tertiary-fixed": "#00452d",
+            "surface-tint": "#a3a6ff",
+            "inverse-surface": "#fcf8fb",
+            "surface-bright": "#2c2c2f",
+            "on-surface-variant": "#adaaad",
+            "tertiary-fixed-dim": "#58e7ab",
+            "on-secondary-fixed": "#40009b",
+            "primary-fixed": "#9396ff",
+            "on-tertiary": "#006443",
+            "on-error": "#490013",
+            "surface-container-lowest": "#000000",
+            "on-tertiary-container": "#005a3c",
+            "inverse-on-surface": "#565557",
+            "tertiary-dim": "#58e7ab",
+            "on-secondary": "#280067",
+            "primary": "#a3a6ff",
+            "tertiary-container": "#69f6b8",
+            "on-surface": "#f9f5f8",
+            "surface-container-highest": "#262528",
+            "surface-dim": "#0e0e10",
+            "primary-dim": "#6063ee",
+            "secondary-fixed": "#dac9ff",
+            "inverse-primary": "#494bd7",
+            "error-container": "#a70138",
+            "tertiary": "#9bffce",
+            "error": "#ff6e84",
+            "on-primary": "#0f00a4",
+            "on-tertiary-fixed-variant": "#006544",
+            "background": "#0e0e10",
+            "on-primary-container": "#0a0081",
+            "surface-container-high": "#1f1f22",
+            "on-primary-fixed": "#000000",
+            "outline-variant": "#48474a",
+            "surface": "#0e0e10",
+            "secondary": "#ac8aff",
+            "primary-fixed-dim": "#8387ff",
+            "on-secondary-container": "#d9c8ff",
+            "on-secondary-fixed-variant": "#5f28c8",
+            "on-error-container": "#ffb2b9",
+            "surface-variant": "#262528"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"],
+            "mono": ["JetBrains Mono"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #48474a26;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #48474a;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar (JSON Component) -->
+<aside class="bg-[#131315]/70 backdrop-blur-xl text-indigo-500 font-['Inter'] tracking-tight text-sm docked left-0 h-screen w-64 border-r border-[#48474a]/15 flex flex-col h-full p-4 shrink-0">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" data-weight="fill">psychology</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8]">RepoMind</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant opacity-70">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<button class="mb-8 w-full py-2.5 px-4 bg-surface-container-high border border-outline-variant/15 text-on-surface rounded-md flex items-center justify-between hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
+<span class="font-medium">Select Repository</span>
+<span class="material-symbols-outlined text-xs">unfold_more</span>
+</button>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span>Chat</span>
+</a>
+<!-- ACTIVE TAB: File Explorer -->
+<a class="flex items-center gap-3 px-3 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span>File Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">search</span>
+<span>Search</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span>Code Review</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+<span>Refactor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-[#48474a]/15 space-y-1">
+<div class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8]">
+<span class="material-symbols-outlined text-tertiary">dns</span>
+<span>Health Status</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8]">
+<span class="material-symbols-outlined text-primary">psychology</span>
+<span>Model Indicator</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col bg-surface overflow-hidden relative">
+<!-- TopNavBar (JSON Component) -->
+<header class="bg-[#131315]/70 backdrop-blur-xl text-indigo-500 font-['Inter'] text-sm docked top-0 w-full h-14 border-b border-[#48474a]/15 flex justify-between items-center px-6 w-full z-10">
+<div class="flex items-center gap-4 text-[#adaaad]">
+<span class="material-symbols-outlined">rebase</span>
+<span class="hover:text-[#f9f5f8] cursor-pointer">repomind-core</span>
+<span class="material-symbols-outlined scale-75 opacity-50">chevron_right</span>
+<span class="hover:text-[#f9f5f8] cursor-pointer">src</span>
+<span class="material-symbols-outlined scale-75 opacity-50">chevron_right</span>
+<span class="text-[#f9f5f8] font-medium">analysis_engine.py</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-outline-variant hover:text-[#f9f5f8] cursor-pointer transition-colors">notifications</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-error-dim rounded-full"></div>
+</div>
+<div class="h-8 w-8 rounded-full bg-surface-container border border-outline-variant/20 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="minimalist geometric profile avatar in shades of indigo and slate gray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKQQIjk8JG-dlExyphJhO72t-W6h2iaBIQPbQir3Qe8DkaCpMtkh0jfSb7JnA39jRL2AZZqEaU2ExDPiJDLhyJNKyoA2kCTddztrOcbz6KXoxWyqICGya0cyoT8FfoKiXExSlHTHoQk3hNzDJgaQkRPqwZSKGpUdEbhA070eov7g1O-m7iMFF0DBwTsihxJ79jQ2WgMHRBPPb6rouj6Y-sdw1MjoUp-iztzce1awSe9ufpJTZksgm0Hs566gTVYhxZygCar78A3Q"/>
+</div>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden">
+<!-- File Tree Panel (Left) -->
+<section class="w-72 bg-surface-container-low flex flex-col border-r border-outline-variant/10">
+<!-- Filter Area -->
+<div class="p-4 border-b border-outline-variant/5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[10px] uppercase font-bold tracking-[0.2em] text-outline">Language Filters</span>
+<span class="material-symbols-outlined text-outline scale-90 cursor-pointer hover:text-on-surface transition-colors">filter_list</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<label class="flex items-center gap-2 px-2 py-1 bg-surface-container rounded cursor-pointer hover:bg-surface-bright transition-all">
+<input checked="" class="w-3 h-3 rounded border-outline-variant bg-transparent text-primary focus:ring-0" type="checkbox"/>
+<span class="text-[11px] font-medium text-primary">Python</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1 bg-surface-container rounded cursor-pointer hover:bg-surface-bright transition-all">
+<input checked="" class="w-3 h-3 rounded border-outline-variant bg-transparent text-tertiary focus:ring-0" type="checkbox"/>
+<span class="text-[11px] font-medium text-tertiary">Rust</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1 bg-surface-container rounded cursor-pointer hover:bg-surface-bright transition-all">
+<input class="w-3 h-3 rounded border-outline-variant bg-transparent text-secondary focus:ring-0" type="checkbox"/>
+<span class="text-[11px] font-medium text-secondary">TS</span>
+</label>
+</div>
+</div>
+<!-- Tree Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-0.5">
+<!-- Folder -->
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-primary-dim" data-weight="fill">folder</span>
+<span class="text-sm font-medium">src</span>
+</div>
+<!-- Nested Folder -->
+<div class="ml-4 space-y-0.5">
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-primary-dim/60" data-weight="fill">folder</span>
+<span class="text-sm">utils</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-md cursor-pointer transition-colors">
+<span class="w-4"></span>
+<span class="material-symbols-outlined text-primary" data-weight="fill">description</span>
+<span class="text-sm font-semibold">analysis_engine.py</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="w-4"></span>
+<span class="material-symbols-outlined text-primary" data-weight="fill">description</span>
+<span class="text-sm">parser.py</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="w-4"></span>
+<span class="material-symbols-outlined text-primary" data-weight="fill">description</span>
+<span class="text-sm">validator.py</span>
+</div>
+</div>
+<!-- Other Folders -->
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-tertiary" data-weight="fill">folder</span>
+<span class="text-sm">tests</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 hover:bg-surface-container rounded-md cursor-pointer transition-colors text-on-surface-variant">
+<span class="w-4"></span>
+<span class="material-symbols-outlined text-secondary" data-weight="fill">settings</span>
+<span class="text-sm">pyproject.toml</span>
+</div>
+</div>
+</section>
+<!-- Main Code & Detail Panel (Right) -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest relative overflow-hidden">
+<!-- File Actions Bar -->
+<div class="flex items-center justify-between px-6 py-3 bg-surface-container-low/50 backdrop-blur border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<h2 class="text-on-surface font-bold text-sm tracking-tight">analysis_engine.py</h2>
+<span class="text-[10px] text-on-surface-variant/70 font-mono">14.2 KB • last modified 2h ago</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-bright hover:bg-surface-container-highest text-on-surface text-xs font-semibold rounded-md transition-all">
+<span class="material-symbols-outlined text-sm">summarize</span>
+                Summarize
+              </button>
+<button class="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_-5px_rgba(163,166,255,0.4)] text-on-primary text-xs font-bold rounded-md transition-all">
+<span class="material-symbols-outlined text-sm" data-weight="fill">chat_bubble</span>
+                Ask AI about this file
+              </button>
+</div>
+</div>
+<!-- Content Split: Preview and Summary -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Code Editor Preview -->
+<div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-container-lowest font-mono text-sm leading-relaxed relative">
+<!-- Code Header Fake Decoration -->
+<div class="flex p-4 text-[#48474a]">
+<div class="w-10 flex flex-col items-end pr-4 select-none opacity-40">
+<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+</div>
+<div class="flex-1 pl-4 border-l border-outline-variant/10">
+<p><span class="text-error-dim">import</span> os</p>
+<p><span class="text-error-dim">import</span> typing <span class="text-error-dim">as</span> t</p>
+<p><span class="text-error-dim">from</span> dataclasses <span class="text-error-dim">import</span> dataclass</p>
+<br/>
+<p><span class="text-outline"># Central engine for repository semantic analysis</span></p>
+<p><span class="text-primary">@dataclass</span></p>
+<p><span class="text-error-dim">class</span> <span class="text-tertiary">AnalysisReport</span>:</p>
+<p class="pl-4">nodes: t.List[t.Any]</p>
+<p class="pl-4">entropy_score: float</p>
+<br/>
+<p><span class="text-error-dim">def</span> <span class="text-primary">compute_vector_mapping</span>(source_tree: <span class="text-tertiary">dict</span>) -&gt; AnalysisReport:</p>
+<p class="pl-4 text-outline">"""Processes file structure into semantic embeddings"""</p>
+<p class="pl-4"><span class="text-secondary">logger</span>.info(<span class="text-tertiary">f"Initializing mapping for {source_tree['id']}"</span>)</p>
+<p class="pl-4"><span class="text-error-dim">if not</span> source_tree:</p>
+<p class="pl-8 text-error-dim">raise</p> <span class="text-tertiary">ValueError</span>(<span class="text-tertiary">"Null tree provided"</span>)
+                  <br/>
+<p class="pl-4"><span class="text-outline"># Recursive depth-first scan of repository nodes</span></p>
+<p class="pl-4">processed_nodes = []</p>
+<p class="pl-4"><span class="text-error-dim">for</span> item <span class="text-error-dim">in</span> source_tree[<span class="text-tertiary">"children"</span>]:</p>
+<p class="pl-8">processed_nodes.append(transform(item))</p>
+</div>
+</div>
+<!-- Minimap Overlay -->
+<div class="absolute right-4 top-4 w-24 h-64 bg-surface-container/30 backdrop-blur rounded border border-outline-variant/10 select-none hidden xl:block">
+<div class="w-full h-full p-2 opacity-30 flex flex-col gap-1 overflow-hidden">
+<div class="h-1 bg-on-surface-variant/20 w-3/4"></div>
+<div class="h-1 bg-on-surface-variant/20 w-1/2"></div>
+<div class="h-1 bg-primary/40 w-full mt-2"></div>
+<div class="h-1 bg-on-surface-variant/20 w-3/4"></div>
+<div class="h-1 bg-on-surface-variant/20 w-1/2"></div>
+<div class="h-1 bg-on-surface-variant/20 w-3/4"></div>
+<div class="h-1 bg-on-surface-variant/20 w-2/3"></div>
+<div class="h-1 bg-primary/40 w-3/4 mt-2"></div>
+<div class="h-1 bg-tertiary/40 w-1/2"></div>
+<div class="h-1 bg-tertiary/40 w-3/4"></div>
+</div>
+<div class="absolute top-0 left-0 w-full h-12 bg-primary/10 border-y border-primary/20"></div>
+</div>
+</div>
+<!-- File Summary Panel (Collapsible) -->
+<aside class="w-80 bg-surface-container-low border-l border-outline-variant/10 flex flex-col">
+<div class="p-6 overflow-y-auto custom-scrollbar space-y-8">
+<!-- Purpose Section -->
+<section>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<h3 class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Purpose</h3>
+</div>
+<p class="text-sm leading-relaxed text-on-surface/80">
+                    This module serves as the primary orchestration layer for semantic parsing. It translates raw file content into multi-dimensional vectors for AI retrieval.
+                  </p>
+</section>
+<!-- Main Functions Section -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary">function</span>
+<h3 class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Main Functions</h3>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant/5">
+<div class="text-xs font-mono text-primary mb-1">compute_vector_mapping()</div>
+<p class="text-[11px] text-on-surface-variant">Generates semantic reports from directory structures.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant/5">
+<div class="text-xs font-mono text-primary mb-1">recursive_scan()</div>
+<p class="text-[11px] text-on-surface-variant">Deep-first traversal of repository tree.</p>
+</div>
+</div>
+</section>
+<!-- Dependencies Section -->
+<section>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary">extension</span>
+<h3 class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">Dependencies</h3>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-highest text-[10px] font-mono rounded">os</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[10px] font-mono rounded">typing</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[10px] font-mono rounded">dataclasses</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[10px] font-mono rounded">numpy</span>
+</div>
+</section>
+<!-- AI Context Insights (Bento Style) -->
+<section class="pt-6 border-t border-outline-variant/10">
+<div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-4 border border-primary/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" data-weight="fill">auto_awesome</span>
+<span class="text-xs font-bold">AI Insight</span>
+</div>
+<p class="text-[11px] text-on-surface/70 italic leading-snug">
+                      "This file contains several tightly coupled classes. Consider extracting the Report generator to improve testability."
+                    </p>
+</div>
+</section>
+</div>
+</aside>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Subtle FAB (Task Focused) suppressed on detail view as per rules, but showing context for specific file actions if needed. Here we follow suppression on Details/Transactional screens. -->
+</body></html>

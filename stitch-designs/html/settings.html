@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#131315",
+                        "on-primary-fixed-variant": "#0e009d",
+                        "secondary-dim": "#8455ef",
+                        "on-background": "#f9f5f8",
+                        "secondary-fixed-dim": "#ceb9ff",
+                        "secondary-container": "#5516be",
+                        "surface-container": "#19191c",
+                        "outline": "#767577",
+                        "tertiary-fixed": "#69f6b8",
+                        "primary-container": "#9396ff",
+                        "error-dim": "#d73357",
+                        "on-tertiary-fixed": "#00452d",
+                        "surface-tint": "#a3a6ff",
+                        "inverse-surface": "#fcf8fb",
+                        "surface-bright": "#2c2c2f",
+                        "on-surface-variant": "#adaaad",
+                        "tertiary-fixed-dim": "#58e7ab",
+                        "on-secondary-fixed": "#40009b",
+                        "primary-fixed": "#9396ff",
+                        "on-tertiary": "#006443",
+                        "on-error": "#490013",
+                        "surface-container-lowest": "#000000",
+                        "on-tertiary-container": "#005a3c",
+                        "inverse-on-surface": "#565557",
+                        "tertiary-dim": "#58e7ab",
+                        "on-secondary": "#280067",
+                        "primary": "#a3a6ff",
+                        "tertiary-container": "#69f6b8",
+                        "on-surface": "#f9f5f8",
+                        "surface-container-highest": "#262528",
+                        "surface-dim": "#0e0e10",
+                        "primary-dim": "#6063ee",
+                        "secondary-fixed": "#dac9ff",
+                        "inverse-primary": "#494bd7",
+                        "error-container": "#a70138",
+                        "tertiary": "#9bffce",
+                        "error": "#ff6e84",
+                        "on-primary": "#0f00a4",
+                        "on-tertiary-fixed-variant": "#006544",
+                        "background": "#0e0e10",
+                        "on-primary-container": "#0a0081",
+                        "surface-container-high": "#1f1f22",
+                        "on-primary-fixed": "#000000",
+                        "outline-variant": "#48474a",
+                        "surface": "#0e0e10",
+                        "secondary": "#ac8aff",
+                        "primary-fixed-dim": "#8387ff",
+                        "on-secondary-container": "#d9c8ff",
+                        "on-secondary-fixed-variant": "#5f28c8",
+                        "on-error-container": "#ffb2b9",
+                        "surface-variant": "#262528"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e0e10;
+            color: #f9f5f8;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #19191c;
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #a3a6ff;
+            margin-top: -6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface overflow-hidden h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="flex flex-col h-full p-4 bg-[#131315]/70 backdrop-blur-xl docked left-0 h-screen w-64 border-r border-[#48474a]/15 font-['Inter'] tracking-tight text-sm">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-lg" data-weight="fill" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8]">RepoMind</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">forum</span>
+<span>Chat</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">folder_open</span>
+<span>File Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">search</span>
+<span>Search</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">terminal</span>
+<span>Code Review</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-[#f9f5f8] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg">auto_fix_high</span>
+<span>Refactor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md group" href="#">
+<span class="material-symbols-outlined text-lg" data-weight="fill" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 space-y-4 border-t border-outline-variant/15">
+<div class="px-3">
+<button class="w-full py-2 bg-gradient-to-r from-primary to-secondary text-on-primary text-xs font-bold rounded-md active:scale-95 transition-transform">
+                    Select Repository
+                </button>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-3 px-3 py-2 text-[#adaaad] text-xs">
+<span class="material-symbols-outlined text-sm">dns</span>
+<span>Health Status</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 text-[#adaaad] text-xs">
+<span class="material-symbols-outlined text-sm">psychology</span>
+<span>Model Indicator</span>
+</div>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-[#131315]/70 backdrop-blur-xl docked top-0 w-full h-14 border-b border-[#48474a]/15 flex justify-between items-center px-6 w-full font-['Inter'] text-sm">
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant">Settings</span>
+<span class="material-symbols-outlined text-outline text-xs">chevron_right</span>
+<span class="text-[#f9f5f8] font-medium">Model Configuration</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-container rounded-md px-3 py-1.5 border border-outline-variant/10">
+<span class="material-symbols-outlined text-sm text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs text-on-surface p-0 w-48" placeholder="Search settings..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-[#f9f5f8] transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden border border-outline-variant/20">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a developer in a dark room with soft blue neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1YBowCbSoSFSZVvS7j5u9qqNPpIkC1_TpBCL3pnHz5SUKyQ0vlbJYqlji29tDBdSOt-3TiwsJWcrsAFJn4_8V35pU67vsi9Y90lTpUuUX9GFpsbLA0DEJFCPX7YnzGRFWtILi7qAL0wEud8g2gi9IcA5qJIG--H-VUq9n8KAjcsY1UdFYRSTfqp8ipjNJPFvilRV5FYFFR5y5DWhmRpqRlseAB4B1qCh79mRSfTh7Tp7pFjG4GRsZL6SRargHrmZWZrVMGXQNQA"/>
+</div>
+</div>
+</header>
+<!-- Settings Layout -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Settings Sub-Navigation -->
+<nav class="w-64 bg-surface flex flex-col p-6 space-y-2 border-r border-outline-variant/10">
+<h3 class="text-[10px] font-bold text-outline uppercase tracking-widest px-3 mb-2">Configuration</h3>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">tune</span>
+<span class="text-sm">General</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container text-primary rounded transition-colors border border-outline-variant/5" href="#">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+<span class="text-sm font-medium">Model Configuration</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">source</span>
+<span class="text-sm">Repository</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">palette</span>
+<span class="text-sm">Appearance</span>
+</a>
+<div class="pt-6">
+<h3 class="text-[10px] font-bold text-outline uppercase tracking-widest px-3 mb-2">Technical</h3>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">key</span>
+<span class="text-sm">API Keys</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">shield</span>
+<span class="text-sm">Security</span>
+</a>
+</div>
+</nav>
+<!-- Main Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-surface-container-low/30 scroll-smooth">
+<div class="max-w-4xl mx-auto p-12 space-y-16">
+<!-- Header Section -->
+<section>
+<h2 class="text-3xl font-bold tracking-tight text-on-surface mb-2">Settings</h2>
+<p class="text-on-surface-variant">Manage your AI intelligence parameters and workspace preferences.</p>
+</section>
+<!-- Model Config Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3 border-b border-outline-variant/10 pb-4">
+<span class="material-symbols-outlined text-primary text-xl">smart_toy</span>
+<h3 class="text-xl font-semibold">Model Configuration</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-medium text-on-surface">Active LLM</label>
+<div class="relative">
+<select class="w-full bg-surface-container-high border-none rounded-lg text-sm px-4 py-3 appearance-none focus:ring-1 focus:ring-primary/30">
+<option>GPT-4o (Optimized)</option>
+<option>Claude 3.5 Sonnet</option>
+<option>Llama 3 70B (Local)</option>
+</select>
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+<div class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(105,246,184,0.4)] mr-2"></div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+<p class="text-[11px] text-on-surface-variant">High-reasoning model for complex refactoring tasks.</p>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-on-surface">Embedding Model</label>
+<select class="w-full bg-surface-container-high border-none rounded-lg text-sm px-4 py-3 focus:ring-1 focus:ring-primary/30">
+<option>text-embedding-3-large</option>
+<option>Cohere-v3-multilingual</option>
+<option>Local BERT (Fast)</option>
+</select>
+<p class="text-[11px] text-on-surface-variant">Determines vector search accuracy for codebase context.</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-medium text-on-surface">Creativity (Temperature)</label>
+<span class="text-sm font-mono text-primary bg-primary/10 px-2 py-0.5 rounded">0.7</span>
+</div>
+<input class="w-full h-1" max="1" min="0" step="0.1" type="range" value="0.7"/>
+<div class="flex justify-between text-[10px] text-outline uppercase tracking-wider font-bold">
+<span>Precise</span>
+<span>Balanced</span>
+<span>Creative</span>
+</div>
+</div>
+</section>
+<!-- Appearance Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3 border-b border-outline-variant/10 pb-4">
+<span class="material-symbols-outlined text-secondary text-xl">palette</span>
+<h3 class="text-xl font-semibold">Appearance</h3>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<!-- Light Mode Card -->
+<div class="group cursor-pointer">
+<div class="h-24 bg-on-background border-2 border-transparent group-hover:border-outline-variant/20 rounded-lg mb-2 relative overflow-hidden transition-all">
+<div class="absolute top-2 left-2 w-8 h-2 bg-surface-container-highest/20 rounded"></div>
+<div class="absolute top-6 left-2 w-12 h-1 bg-surface-container-highest/10 rounded"></div>
+<div class="absolute bottom-2 right-2 w-4 h-4 bg-primary/20 rounded-full"></div>
+</div>
+<span class="text-xs text-on-surface-variant block text-center">Light</span>
+</div>
+<!-- Dark Mode Card -->
+<div class="group cursor-pointer">
+<div class="h-24 bg-surface-container border-2 border-primary rounded-lg mb-2 relative overflow-hidden transition-all shadow-[0_0_15px_rgba(163,166,255,0.1)]">
+<div class="absolute top-2 left-2 w-8 h-2 bg-on-surface-variant/20 rounded"></div>
+<div class="absolute top-6 left-2 w-12 h-1 bg-on-surface-variant/10 rounded"></div>
+<div class="absolute bottom-2 right-2 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+<span class="text-xs text-primary font-medium block text-center">Dark (Active)</span>
+</div>
+<!-- System Card -->
+<div class="group cursor-pointer">
+<div class="h-24 bg-surface-container border-2 border-transparent group-hover:border-outline-variant/20 rounded-lg mb-2 relative overflow-hidden transition-all">
+<div class="absolute inset-0 bg-gradient-to-br from-on-background/10 to-surface-container-highest/50"></div>
+<div class="absolute bottom-2 right-2 w-4 h-4 bg-outline/20 rounded-full"></div>
+</div>
+<span class="text-xs text-on-surface-variant block text-center">System</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-sm font-medium text-on-surface">Editor Font</label>
+<select class="w-full bg-surface-container-high border-none rounded-lg text-sm px-4 py-3 focus:ring-1 focus:ring-primary/30 font-mono">
+<option>JetBrains Mono</option>
+<option>Fira Code</option>
+<option>Cascadia Code</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium text-on-surface">UI Font Size</label>
+<div class="flex items-center bg-surface-container-high rounded-lg p-1">
+<button class="flex-1 py-2 text-xs hover:bg-surface-container rounded transition-colors">Small</button>
+<button class="flex-1 py-2 text-xs bg-surface-bright rounded shadow-sm">Medium</button>
+<button class="flex-1 py-2 text-xs hover:bg-surface-container rounded transition-colors">Large</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Advanced Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3 border-b border-outline-variant/10 pb-4">
+<span class="material-symbols-outlined text-error text-xl">encrypted</span>
+<h3 class="text-xl font-semibold">Security &amp; Advanced</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-xl">
+<div>
+<h4 class="text-sm font-medium">OpenAI API Key</h4>
+<p class="text-xs text-on-surface-variant mt-1">sk-••••••••••••••••••••••••••••••••</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-xs bg-surface-bright hover:bg-surface-container-highest rounded transition-colors">Reveal</button>
+<button class="px-3 py-1.5 text-xs bg-surface-bright hover:bg-surface-container-highest rounded transition-colors">Update</button>
+</div>
+</div>
+<div class="p-6 border border-error-dim/20 rounded-xl bg-error-container/5 space-y-4">
+<div>
+<h4 class="text-sm font-medium text-error">Danger Zone</h4>
+<p class="text-xs text-on-surface-variant mt-1">These actions are irreversible and will reset your workspace data.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 text-xs font-semibold text-error border border-error/30 hover:bg-error/10 rounded transition-colors">Reset Knowledge Base</button>
+<button class="px-4 py-2 text-xs font-semibold bg-error text-on-error rounded hover:bg-error-dim transition-colors">Wipe All Settings</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer actions -->
+<div class="pt-8 flex justify-end gap-4 border-t border-outline-variant/10">
+<button class="px-6 py-2.5 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">Discard Changes</button>
+<button class="px-8 py-2.5 text-sm font-bold bg-primary text-on-primary rounded shadow-lg shadow-primary/20 active:scale-95 transition-all">Save Changes</button>
+</div>
+<!-- Extra spacing -->
+<div class="h-24"></div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

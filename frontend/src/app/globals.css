@@ -1,59 +1,593 @@
+/**
+ * Global Styles: RepoMind Assistant
+ * "Obsidian Intelligence" Framework
+ * 
+ * Design Philosophy:
+ * - No-Line Rule: Borders prohibited for sectioning (use background color shifts)
+ * - Tonal Layering: Depth through color value shifts, not shadows
+ * - Quart Easing: High-end, responsive "snap" for all transitions
+ * - 4px Grid: Every margin must be a multiple of 4
+ */
+
+/* Import Work Sans Font */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * Material Symbols Outlined Font Configuration
+ */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/**
+ * CSS Custom Properties
+ * For shadcn/ui compatibility and dynamic theming
+ */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    /* Light Mode Colors */
+    /* Background & Surface */
+    --background: 249 245 248;                 /* #f9f5f8 - Soft white */
+    --foreground: 14 14 16;                    /* #0e0e10 - Deep charcoal */
+    
+    /* Card */
+    --card: 255 255 255;                       /* #ffffff - Pure white */
+    --card-foreground: 14 14 16;               /* #0e0e10 */
+    
+    /* Popover */
+    --popover: 255 255 255;                    /* #ffffff */
+    --popover-foreground: 14 14 16;            /* #0e0e10 */
+    
+    /* Primary */
+    --primary: 73 75 215;                      /* #494bd7 - Deeper indigo for light mode */
+    --primary-foreground: 249 245 248;         /* #f9f5f8 */
+    
+    /* Secondary */
+    --secondary: 85 22 190;                    /* #5516be - Deeper violet */
+    --secondary-foreground: 249 245 248;       /* #f9f5f8 */
+    
+    /* Muted */
+    --muted: 240 240 242;                      /* #f0f0f2 - Light gray */
+    --muted-foreground: 118 117 119;           /* #767577 */
+    
+    /* Accent */
+    --accent: 235 235 238;                     /* #ebebee - Lighter gray */
+    --accent-foreground: 14 14 16;             /* #0e0e10 */
+    
+    /* Destructive */
+    --destructive: 215 49 87;                  /* #d73157 - Deeper error red */
+    --destructive-foreground: 249 245 248;     /* #f9f5f8 */
+    
+    /* Border */
+    --border: 173 170 173;                     /* #adaaad */
+    --input: 173 170 173;                      /* #adaaad */
+    
+    /* Ring (focus) */
+    --ring: 73 75 215;                         /* #494bd7 - primary */
+    
+    /* Radius */
+    --radius: 0.375rem;                        /* 6px - md */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    /* Dark Mode Colors */
+    /* Background & Surface */
+    --background: 14 14 16;                    /* #0e0e10 */
+    --foreground: 249 245 248;                 /* #f9f5f8 */
+    
+    /* Card */
+    --card: 25 25 28;                          /* #19191c - surface-container */
+    --card-foreground: 249 245 248;            /* #f9f5f8 */
+    
+    /* Popover */
+    --popover: 38 37 40;                       /* #262528 - surface-container-highest */
+    --popover-foreground: 249 245 248;         /* #f9f5f8 */
+    
+    /* Primary */
+    --primary: 163 166 255;                    /* #a3a6ff */
+    --primary-foreground: 15 0 164;            /* #0f00a4 */
+    
+    /* Secondary */
+    --secondary: 172 138 255;                  /* #ac8aff */
+    --secondary-foreground: 249 245 248;       /* #f9f5f8 */
+    
+    /* Muted */
+    --muted: 19 19 21;                         /* #131315 - surface-container-low */
+    --muted-foreground: 173 170 173;           /* #adaaad - on-surface-variant */
+    
+    /* Accent */
+    --accent: 31 31 34;                        /* #1f1f22 - surface-container-high */
+    --accent-foreground: 249 245 248;          /* #f9f5f8 */
+    
+    /* Destructive */
+    --destructive: 255 110 132;                /* #ff6e84 - error */
+    --destructive-foreground: 73 0 19;         /* #490013 - on-error */
+    
+    /* Border */
+    --border: 72 71 74;                        /* #48474a - outline-variant */
+    --input: 72 71 74;                         /* #48474a - outline-variant */
+    
+    /* Ring (focus) */
+    --ring: 163 166 255;                       /* #a3a6ff - primary */
+    
+    /* Radius */
+    --radius: 0.375rem;                        /* 6px - md */
+  }
+
+  /**
+   * Theme Transition
+   * Smooth transition when switching themes
+   */
+  .theme-transitioning,
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: background-color 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                color 250ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /**
+   * Base Element Styles
+   */
+  * {
+    @apply border-outline-variant;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-sans antialiased;
+    /* Prevent pure white text - use on-surface instead */
+    color: rgb(249 245 248);
+  }
+
+  /* Light mode body styles */
+  .light body {
+    background-color: rgb(249 245 248);
+    color: rgb(14 14 16);
+  }
+
+  /**
+   * Typography Base Styles
+   */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-on-surface;
+  }
+
+  h1 {
+    @apply text-headline-lg;
+  }
+
+  h2 {
+    @apply text-headline-md;
+  }
+
+  h3 {
+    @apply text-headline-sm;
+  }
+
+  h4 {
+    @apply text-title-lg;
+  }
+
+  h5 {
+    @apply text-title-md;
+  }
+
+  h6 {
+    @apply text-title-sm;
+  }
+
+  p {
+    @apply text-body-md leading-relaxed;
+  }
+
+  /**
+   * Code Blocks
+   * Container: surface-container-lowest (true black)
+   * Syntax highlighting: tertiary (emerald) for strings, error-dim (rose) for keywords, primary (indigo) for functions
+   */
+  code {
+    @apply font-mono text-body-sm bg-surface-container-lowest px-1 py-0.5 rounded-sm;
+  }
+
+  pre {
+    @apply font-mono text-body-sm bg-surface-container-lowest p-4 rounded-md overflow-x-auto;
+  }
+
+  pre code {
+    @apply bg-transparent p-0;
+  }
+
+  /* Light mode code blocks */
+  .light code {
+    background-color: rgb(232 229 232);
+    color: rgb(14 14 16);
+  }
+
+  .light pre {
+    background-color: rgb(232 229 232);
+    color: rgb(14 14 16);
+  }
+
+  /**
+   * Links
+   */
+  a {
+    @apply text-primary hover:text-primary-dim transition-colors duration-fast ease-quart;
+  }
+
+  /* Light mode links */
+  .light a {
+    color: rgb(73 75 215);
+  }
+
+  .light a:hover {
+    color: rgb(96 99 238);
+  }
+
+  /**
+   * Selection
+   */
+  ::selection {
+    @apply bg-primary/20 text-on-surface;
+  }
+
+  /* Light mode selection */
+  .light ::selection {
+    background-color: rgba(73, 75, 215, 0.2);
+    color: rgb(14 14 16);
+  }
+
+  /**
+   * Scrollbar Styling (Webkit)
+   */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-container-low;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-outline-variant rounded-full hover:bg-outline;
+  }
+
+  /* Light mode scrollbar */
+  .light ::-webkit-scrollbar-track {
+    background-color: rgb(240 240 242);
+  }
+
+  .light ::-webkit-scrollbar-thumb {
+    background-color: rgb(200 199 201);
+  }
+
+  .light ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(173 170 173);
+  }
+
+  /**
+   * Focus Visible Styles
+   * Use focus-glow shadow instead of ring
+   */
+  *:focus-visible {
+    @apply outline-none shadow-focus-glow;
+  }
+
+  /**
+   * Reduced Motion Support
+   * Respect user's motion preferences for accessibility
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /**
+   * Screen Reader Only
+   * Hide visually but keep accessible to screen readers
+   */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+/**
+ * Component Layer
+ * Reusable component patterns
+ */
+@layer components {
+  /**
+   * Glass Effect (Glassmorphism)
+   * For navigation bars and floating panels
+   */
+  .glass {
+    @apply bg-surface-container/70 backdrop-blur-glass;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  .glass-modal {
+    @apply bg-surface-container-highest/80 backdrop-blur-glass-lg;
   }
+
+  /**
+   * Ghost Border
+   * For accessibility fallback when contrast is needed
+   * Use at 15% opacity
+   */
+  .ghost-border {
+    @apply border border-outline-variant/15;
+  }
+
+  /**
+   * Gradient Backgrounds
+   * Signature gradient: primary to secondary (Electric Indigo to Violet)
+   * Use sparingly for high-intent CTAs
+   */
+  .gradient-primary {
+    @apply bg-gradient-to-br from-primary to-secondary;
+  }
+
+  .gradient-primary-subtle {
+    @apply bg-gradient-to-br from-primary-dim to-secondary-dim;
+  }
+
+  /**
+   * Card Styles
+   * No borders - use tonal layering
+   */
+  .card {
+    @apply bg-surface-container rounded-md;
+  }
+
+  .card-elevated {
+    @apply bg-surface-container-high rounded-md;
+  }
+
+  .card-floating {
+    @apply bg-surface-container-highest rounded-md shadow-float;
+  }
+
+  /* Light mode cards */
+  .light .card {
+    background-color: rgb(255 255 255);
+  }
+
+  .light .card-elevated {
+    background-color: rgb(255 255 255);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .light .card-floating {
+    background-color: rgb(255 255 255);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  /**
+   * Button Base Styles
+   */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-fast ease-quart;
+    @apply focus-visible:outline-none focus-visible:shadow-focus-glow;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn gradient-primary text-on-primary;
+    @apply hover:opacity-90 active:scale-98;
+  }
+
+  .btn-secondary {
+    @apply btn bg-surface-bright text-on-surface ghost-border;
+    @apply hover:bg-surface-container-high;
+  }
+
+  .btn-tertiary {
+    @apply btn bg-transparent text-on-surface-variant;
+    @apply hover:text-on-surface hover:bg-surface-container-low;
+  }
+
+  /* Light mode buttons */
+  .light .btn-primary {
+    background: linear-gradient(135deg, #494bd7 0%, #5516be 100%);
+    color: rgb(249 245 248);
+  }
+
+  .light .btn-secondary {
+    background-color: rgb(255 255 255);
+    color: rgb(14 14 16);
+    border: 1px solid rgba(173, 170, 173, 0.15);
+  }
+
+  .light .btn-secondary:hover {
+    background-color: rgb(235 235 238);
+  }
+
+  .light .btn-tertiary {
+    color: rgb(86 85 87);
+  }
+
+  .light .btn-tertiary:hover {
+    color: rgb(14 14 16);
+    background-color: rgb(240 240 242);
+  }
+
+  /**
+   * Input Field Styles
+   * Base: surface-container-low background
+   * Active: primary-dim ghost border + primary outer glow
+   */
+  .input {
+    @apply w-full rounded-md bg-surface-container-low px-3 py-2;
+    @apply text-body-md text-on-surface placeholder:text-outline;
+    @apply transition-all duration-fast ease-quart;
+    @apply focus:shadow-focus-glow focus:ghost-border;
+  }
+
+  /* Light mode inputs */
+  .light .input {
+    background-color: rgb(240 240 242);
+    color: rgb(14 14 16);
+  }
+
+  .light .input::placeholder {
+    color: rgb(173 170 173);
+  }
+
+  .light .input:focus {
+    box-shadow: 0 0 0 4px rgba(73, 75, 215, 0.1);
+  }
+
+  /**
+   * Label Styles
+   * All-caps with widest tracking for metadata
+   */
+  .label {
+    @apply text-label-sm uppercase tracking-widest text-on-surface-variant;
+  }
+
+  /**
+   * Separator
+   * Use sparingly - prefer spacing over dividers
+   */
+  .separator {
+    @apply h-px bg-outline-variant/15;
+  }
+
+  /**
+   * Skeleton Loader
+   */
+  .skeleton {
+    @apply bg-surface-container-low animate-pulse rounded-md;
+  }
+
+  /* Light mode skeleton */
+  .light .skeleton {
+    background-color: rgb(240 240 242);
+  }
+
+  /**
+   * Badge/Chip Styles
+   */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-label-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-container text-on-primary;
+  }
+
+  .badge-secondary {
+    @apply badge bg-secondary-container text-on-secondary;
+  }
+
+  .badge-tertiary {
+    @apply badge bg-tertiary-container text-on-tertiary;
+  }
+
+  .badge-error {
+    @apply badge bg-error-container text-on-error;
+  }
+}
+
+/**
+ * Utility Layer
+ * Custom utility classes
+ */
+@layer utilities {
+  /**
+   * Text Utilities
+   */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /**
+   * Transition Utilities
+   */
+  .transition-quart {
+    @apply transition-all duration-normal ease-quart;
+  }
+
+  /**
+   * Spacing Utilities (Editorial Feel)
+   * Use extreme whitespace (64px+) between major sections
+   */
+  .section-spacing {
+    @apply py-16;
+  }
+
+  .section-spacing-lg {
+    @apply py-24;
+  }
+
+  /**
+   * Truncate Utilities
+   */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+
+/**
+ * Custom Scrollbar Styles
+ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0e0e10;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #48474a;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #767577;
 }

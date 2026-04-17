@@ -12,11 +12,18 @@ Requirements:
 - 10.9: Perform health checks on dependencies on startup
 """
 
+import os
+from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Dict, Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Load environment variables from .env file
+from dotenv import load_dotenv
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 from app.core.config import get_settings
 from app.core.logging_config import configure_logging, get_logger
@@ -28,6 +35,7 @@ from app.core.graceful_degradation import (
     get_service_availability,
 )
 from app.api.routes import repositories, search, chat, jobs, review, health
+from app.api.routes import settings as settings_router
 from app.middleware import (
     register_error_handlers,
     RateLimitMiddleware,
@@ -230,15 +238,17 @@ async def _run_health_checks() -> Dict[str, Dict[str, Any]]:
             "message": f"Connection failed: {str(e)}"
         }
     
-    # Check Ollama with graceful degradation (optional - don't fail startup if unavailable)
+    # Check LLM provider with graceful degradation (optional - don't fail startup if unavailable)
     try:
-        from app.services.llm_service import LLMService
-        llm_service = LLMService()
+        from app.services.groq_llm_service import create_llm_service
+        llm_service = create_llm_service()
         is_healthy = await check_ollama_health(llm_service)
         await llm_service.close()
+        import os
+        provider = os.getenv("LLM_PROVIDER", "ollama")
         health_status["ollama"] = {
             "healthy": is_healthy,
-            "message": "Connected and responsive" if is_healthy else "Connection failed - chat operations disabled, search remains functional"
+            "message": f"[{provider.upper()}] Connected and responsive" if is_healthy else f"[{provider.upper()}] Connection failed - chat operations disabled, search remains functional"
         }
     except Exception as e:
         health_status["ollama"] = {
@@ -314,6 +324,9 @@ app.include_router(jobs.router, prefix="/api/v1")
 
 # Register code review routes
 app.include_router(review.router, prefix="/api/v1")
+
+# Register settings routes
+app.include_router(settings_router.router, prefix="/api/v1")
 
 # Register health and monitoring routes
 app.include_router(health.router, prefix="/api/v1")

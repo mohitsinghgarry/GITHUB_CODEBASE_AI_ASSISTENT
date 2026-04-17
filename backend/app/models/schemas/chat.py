@@ -79,6 +79,10 @@ class ChatRequest(BaseModel):
         min_length=1,
         description="Repository IDs to search in"
     )
+    model: Optional[str] = Field(
+        None,
+        description="LLM model to use (uses default if not provided)"
+    )
     explanation_mode: ExplanationMode = Field(
         default=ExplanationMode.TECHNICAL,
         description="Explanation mode for response"
@@ -131,7 +135,22 @@ class ChatStreamChunk(BaseModel):
 class SessionListResponse(BaseModel):
     """Response schema for listing sessions."""
     
-    sessions: List[str] = Field(..., description="List of session IDs")
+    id: str = Field(..., description="Session ID")
+    title: Optional[str] = Field(None, description="Session title")
+    created_at: datetime = Field(..., description="Creation timestamp")
+    updated_at: datetime = Field(..., description="Last update timestamp")
+    repository_ids: List[UUID] = Field(..., description="Repository IDs")
+    model: str = Field(..., description="Model used")
+    message_count: int = Field(..., description="Number of messages")
+    
+    class Config:
+        from_attributes = True
+
+
+class SessionsListResponse(BaseModel):
+    """Response schema for listing all sessions."""
+    
+    sessions: List[SessionListResponse] = Field(..., description="List of sessions")
     total: int = Field(..., description="Total number of sessions")
     
     class Config:

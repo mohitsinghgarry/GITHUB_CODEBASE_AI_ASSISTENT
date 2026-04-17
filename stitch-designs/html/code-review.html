@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#131315",
+                    "on-primary-fixed-variant": "#0e009d",
+                    "secondary-dim": "#8455ef",
+                    "on-background": "#f9f5f8",
+                    "secondary-fixed-dim": "#ceb9ff",
+                    "secondary-container": "#5516be",
+                    "surface-container": "#19191c",
+                    "outline": "#767577",
+                    "tertiary-fixed": "#69f6b8",
+                    "primary-container": "#9396ff",
+                    "error-dim": "#d73357",
+                    "on-tertiary-fixed": "#00452d",
+                    "surface-tint": "#a3a6ff",
+                    "inverse-surface": "#fcf8fb",
+                    "surface-bright": "#2c2c2f",
+                    "on-surface-variant": "#adaaad",
+                    "tertiary-fixed-dim": "#58e7ab",
+                    "on-secondary-fixed": "#40009b",
+                    "primary-fixed": "#9396ff",
+                    "on-tertiary": "#006443",
+                    "on-error": "#490013",
+                    "surface-container-lowest": "#000000",
+                    "on-tertiary-container": "#005a3c",
+                    "inverse-on-surface": "#565557",
+                    "tertiary-dim": "#58e7ab",
+                    "on-secondary": "#280067",
+                    "primary": "#a3a6ff",
+                    "tertiary-container": "#69f6b8",
+                    "on-surface": "#f9f5f8",
+                    "surface-container-highest": "#262528",
+                    "surface-dim": "#0e0e10",
+                    "primary-dim": "#6063ee",
+                    "secondary-fixed": "#dac9ff",
+                    "inverse-primary": "#494bd7",
+                    "error-container": "#a70138",
+                    "tertiary": "#9bffce",
+                    "error": "#ff6e84",
+                    "on-primary": "#0f00a4",
+                    "on-tertiary-fixed-variant": "#006544",
+                    "background": "#0e0e10",
+                    "on-primary-container": "#0a0081",
+                    "surface-container-high": "#1f1f22",
+                    "on-primary-fixed": "#000000",
+                    "outline-variant": "#48474a",
+                    "surface": "#0e0e10",
+                    "secondary": "#ac8aff",
+                    "primary-fixed-dim": "#8387ff",
+                    "on-secondary-container": "#d9c8ff",
+                    "on-secondary-fixed-variant": "#5f28c8",
+                    "on-error-container": "#ffb2b9",
+                    "surface-variant": "#262528"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 18px;
+        }
+        .glass-nav {
+            background: rgba(19, 19, 21, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0e0e10;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #48474a;
+            border-radius: 10px;
+        }
+        .cubic-transition {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden h-screen flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-64 border-r border-[#48474a]/15 bg-[#131315]/70 backdrop-blur-xl flex flex-col p-4 z-50">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#f9f5f8]">RepoMind</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-['Inter'] tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-sm font-['Inter'] tracking-tight">Chat</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-sm font-['Inter'] tracking-tight">File Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-sm font-['Inter'] tracking-tight">Search</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-indigo-400 font-semibold bg-[#19191c] rounded-md transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] scale-95" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-sm font-['Inter'] tracking-tight">Code Review</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+<span class="text-sm font-['Inter'] tracking-tight">Refactor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#adaaad] hover:text-[#f9f5f8] hover:bg-[#19191c] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-md group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-['Inter'] tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-[#48474a]/15">
+<button class="w-full flex items-center justify-between px-4 py-2 bg-surface-container rounded-md text-xs font-medium text-on-surface mb-6 border border-outline-variant/15 hover:bg-surface-bright transition-colors">
+<span>Select Repository</span>
+<span class="material-symbols-outlined text-[16px]">unfold_more</span>
+</button>
+<div class="space-y-3 px-2 pb-2">
+<div class="flex items-center gap-3 text-[#adaaad] text-xs">
+<span class="material-symbols-outlined text-[16px]">dns</span>
+<span>Health Status</span>
+<span class="ml-auto w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-center gap-3 text-[#adaaad] text-xs">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+<span>Model Indicator</span>
+<span class="ml-auto font-mono text-[10px] text-primary">GPT-4o</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col relative overflow-hidden bg-surface">
+<!-- TopNavBar -->
+<header class="h-14 border-b border-[#48474a]/15 bg-[#131315]/70 backdrop-blur-xl flex justify-between items-center px-6 w-full shrink-0">
+<div class="flex items-center gap-3 text-sm">
+<span class="text-[#adaaad]">Repositories</span>
+<span class="material-symbols-outlined text-[#48474a] text-sm">chevron_right</span>
+<span class="text-[#adaaad]">repomind-core</span>
+<span class="material-symbols-outlined text-[#48474a] text-sm">chevron_right</span>
+<span class="text-[#f9f5f8] font-medium">Code Review</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#767577] text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-md pl-9 pr-4 py-1.5 text-xs w-64 focus:ring-1 focus:ring-primary/30 text-on-surface placeholder:text-outline outline-none cubic-transition" placeholder="Search findings..." type="text"/>
+</div>
+<button class="p-2 text-[#adaaad] hover:text-[#f9f5f8] transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error-dim rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a professional developer in a dimly lit studio with soft blue ambient rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGAdipkymTI-jexXpX6Aq3ZlZpQ1zmvmMeTnTq9SRALmpydyFohZGfJfhPD4sdgiF76CJt3KxVrbAw42PUtEWHwIKW9ipRcZ9Wf4IDP75lkCUqBRxXGvPIuKuoEsVK6tIyUEqE1g-OEOQKr5n-TDp9IOozgOWOjpVGnS5UHA5fcpJePF7spFXKNzZzjI1HrYvoEUcUrmsU0z3WURe1OxNzaFA5dZk2g_sUpXNxx1TDobpwEjm-3UBE4juFNHy3yIB7U_Xqqc1hRQ"/>
+</div>
+</div>
+</header>
+<!-- Editor and Review Shell -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left: Code Input Panel -->
+<section class="w-1/2 flex flex-col border-r border-[#48474a]/15 bg-surface">
+<div class="p-4 flex items-center justify-between bg-surface-container-low shrink-0">
+<div class="flex items-center gap-4">
+<select class="bg-transparent border-none text-xs font-semibold text-on-surface-variant focus:ring-0 cursor-pointer hover:text-on-surface transition-colors">
+<option>TypeScript</option>
+<option>Python</option>
+<option>Rust</option>
+<option>Go</option>
+</select>
+<div class="h-4 w-px bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="w-3 h-3 rounded-sm border border-outline peer-checked:bg-primary peer-checked:border-primary cubic-transition"></div>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-on-surface transition-colors">Bugs</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="w-3 h-3 rounded-sm border border-outline peer-checked:bg-secondary-dim peer-checked:border-secondary-dim cubic-transition"></div>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-on-surface transition-colors">Security</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="w-3 h-3 rounded-sm border border-outline peer-checked:bg-tertiary peer-checked:border-tertiary cubic-transition"></div>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-on-surface transition-colors">Style</span>
+</label>
+</div>
+</div>
+<button class="text-xs text-primary font-medium hover:text-primary-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">upload_file</span>
+                        Upload File
+                    </button>
+</div>
+<div class="flex-1 relative bg-surface-container-lowest overflow-hidden">
+<div class="absolute inset-0 p-6 font-mono text-sm leading-relaxed overflow-y-auto custom-scrollbar">
+<div class="flex gap-4">
+<div class="text-outline text-right select-none opacity-40">
+                                01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20
+                            </div>
+<code class="text-on-surface-variant block whitespace-pre">
+<span class="text-error-dim">async</span> <span class="text-primary">function</span> <span class="text-tertiary">fetchUserData</span>(userId: <span class="text-secondary">string</span>) {
+  <span class="text-outline">// Potential vulnerability here</span>
+<span class="text-primary">const</span> query = <span class="text-tertiary">`SELECT * FROM users WHERE id = '${userId}'`</span>;
+  
+  <span class="text-error-dim">try</span> {
+    <span class="text-primary">const</span> result = <span class="text-error-dim">await</span> db.<span class="text-primary">execute</span>(query);
+    <span class="text-error-dim">if</span> (!result) {
+      <span class="text-error-dim">throw new</span> <span class="text-secondary">Error</span>(<span class="text-tertiary">'User not found'</span>);
+    }
+    <span class="text-error-dim">return</span> result;
+  } <span class="text-error-dim">catch</span> (e) {
+    console.<span class="text-primary">log</span>(e); <span class="text-outline">// Security risk: exposing errors</span>
+  }
+}
+
+<span class="text-primary">export const</span> <span class="text-tertiary">handler</span> = <span class="text-primary">async</span> (event) =&gt; {
+  <span class="text-primary">const</span> { id } = event.<span class="text-tertiary">pathParameters</span>;
+  <span class="text-error-dim">return await</span> <span class="text-tertiary">fetchUserData</span>(id);
+};
+                            </code>
+</div>
+</div>
+<div class="absolute bottom-6 right-6">
+<button class="bg-gradient-to-r from-primary to-secondary text-on-primary font-bold px-6 py-3 rounded-md shadow-2xl hover:scale-105 active:scale-95 cubic-transition flex items-center gap-2">
+<span class="material-symbols-outlined">auto_awesome</span>
+                            Analyze Code
+                        </button>
+</div>
+</div>
+</section>
+<!-- Right: Review Results Panel -->
+<section class="w-1/2 flex flex-col bg-surface-container-low">
+<!-- Summary Bar -->
+<div class="p-6 bg-surface-container shrink-0">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight mb-1">Analysis Complete</h2>
+<p class="text-xs text-on-surface-variant">4 issues identified in 22 lines of code</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-bright rounded text-[#adaaad] hover:text-on-surface border border-outline-variant/15 transition-all">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+<button class="p-2 bg-surface-bright rounded text-[#adaaad] hover:text-on-surface border border-outline-variant/15 transition-all">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface p-3 rounded border-l-4 border-error-dim">
+<div class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Critical</div>
+<div class="text-2xl font-bold text-error-dim">1</div>
+</div>
+<div class="bg-surface p-3 rounded border-l-4 border-secondary-dim">
+<div class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Warning</div>
+<div class="text-2xl font-bold text-secondary-dim">2</div>
+</div>
+<div class="bg-surface p-3 rounded border-l-4 border-tertiary">
+<div class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Suggestion</div>
+<div class="text-2xl font-bold text-tertiary">1</div>
+</div>
+</div>
+</div>
+<!-- Issue List -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+<!-- Issue Card 1 -->
+<div class="bg-surface-container rounded-lg border border-error-dim/20 overflow-hidden cubic-transition hover:border-error-dim/50">
+<div class="p-4 flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-error-dim/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-error-dim">security</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-error-dim text-[10px] font-bold text-on-error uppercase tracking-wider">Critical</span>
+<h3 class="text-sm font-bold text-on-surface">SQL Injection Vulnerability</h3>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Directly embedding <code class="bg-surface-container-highest px-1 rounded">userId</code> into the SQL query string allows for unauthorized database access via malicious input.</p>
+<div class="mt-4 border border-outline-variant/20 rounded-md bg-surface-container-lowest">
+<div class="px-3 py-2 border-b border-outline-variant/10 flex items-center justify-between">
+<span class="text-[10px] font-mono text-outline uppercase tracking-wider">Suggested Fix</span>
+<button class="text-[10px] font-bold text-primary hover:underline">APPLY FIX</button>
+</div>
+<div class="p-3 font-mono text-[11px] leading-tight">
+<div class="text-error-dim opacity-50">- const query = `SELECT * FROM users WHERE id = '${userId}'`;</div>
+<div class="text-tertiary">+ const query = 'SELECT * FROM users WHERE id = ?';</div>
+<div class="text-tertiary">+ const result = await db.execute(query, [userId]);</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 2 -->
+<div class="bg-surface-container rounded-lg border border-secondary-dim/20 overflow-hidden cubic-transition hover:border-secondary-dim/50">
+<div class="p-4 flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-secondary-dim/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-dim">warning</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-dim text-[10px] font-bold text-on-secondary uppercase tracking-wider">Warning</span>
+<h3 class="text-sm font-bold text-on-surface">Insecure Error Logging</h3>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Logging the entire error object <code class="bg-surface-container-highest px-1 rounded">e</code> might expose sensitive stack traces or database schema information in production logs.</p>
+<button class="mt-3 flex items-center gap-2 text-[10px] font-bold text-outline uppercase tracking-widest hover:text-on-surface-variant transition-colors">
+                                    Show suggested fix
+                                    <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Issue Card 3 -->
+<div class="bg-surface-container rounded-lg border border-tertiary/20 overflow-hidden cubic-transition hover:border-tertiary/50">
+<div class="p-4 flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-tertiary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-tertiary text-[10px] font-bold text-on-tertiary uppercase tracking-wider">Suggestion</span>
+<h3 class="text-sm font-bold text-on-surface">Missing Return Type</h3>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">The <code class="bg-surface-container-highest px-1 rounded">handler</code> function does not have an explicit return type defined. Adding types improves IDE intelligence and code reliability.</p>
+<button class="mt-3 flex items-center gap-2 text-[10px] font-bold text-outline uppercase tracking-widest hover:text-on-surface-variant transition-colors">
+                                    Show suggested fix
+                                    <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Export -->
+<div class="p-6 border-t border-[#48474a]/15 bg-surface flex justify-between items-center shrink-0">
+<div class="flex items-center gap-2 text-xs text-outline">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                        Scanning complete (0.8s)
+                    </div>
+<div class="flex gap-3">
+<button class="px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-on-surface transition-colors">
+                            Dismiss All
+                        </button>
+<button class="px-4 py-2 bg-surface-bright border border-outline-variant/30 rounded text-xs font-bold text-on-surface hover:bg-surface-container-highest transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+                            Download JSON
+                        </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Visual Polish: Ambient background pulse -->
+<div class="fixed top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+<div class="fixed bottom-0 left-0 w-[300px] h-[300px] bg-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+</body></html>

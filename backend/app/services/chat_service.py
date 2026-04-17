@@ -584,6 +584,7 @@ class ChatService:
         explanation_mode: ExplanationMode = ExplanationMode.TECHNICAL,
         top_k: int = 5,
         include_history: bool = True,
+        model: Optional[str] = None,
     ) -> Tuple[str, List[Citation], str]:
         """
         Process a chat message and generate a response.
@@ -672,6 +673,7 @@ class ChatService:
         logger.info("Generating response from LLM...")
         response = await self.llm_service.generate(
             prompt=prompt,
+            model=model,
             explanation_mode=explanation_mode,
             temperature=self.settings.rag_temperature,
             max_tokens=self.max_response_tokens,
@@ -706,6 +708,7 @@ class ChatService:
         explanation_mode: ExplanationMode = ExplanationMode.TECHNICAL,
         top_k: int = 5,
         include_history: bool = True,
+        model: Optional[str] = None,
     ) -> AsyncIterator[Tuple[str, Optional[List[Citation]], Optional[str]]]:
         """
         Process a chat message and stream the response.
@@ -800,6 +803,7 @@ class ChatService:
         
         async for chunk in self.llm_service.generate_stream(
             prompt=prompt,
+            model=model,
             explanation_mode=explanation_mode,
             temperature=self.settings.rag_temperature,
             max_tokens=self.max_response_tokens,

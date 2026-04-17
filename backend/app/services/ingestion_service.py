@@ -26,7 +26,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.database import get_session_maker
-from app.jobs.tasks.ingestion_tasks import create_ingestion_pipeline
 from app.models.orm import Repository, IngestionJob, CodeChunk
 from app.services.repository_service import RepositoryService
 
@@ -119,6 +118,9 @@ class IngestionService:
                     f"Created ingestion job {job_id} for repository {repository_id}"
                 )
                 
+                # Import here to avoid circular dependency
+                from app.jobs.tasks.ingestion_tasks import create_ingestion_pipeline
+                
                 # Create Celery task chain
                 pipeline = create_ingestion_pipeline(
                     repository_id=str(repository_id),
@@ -129,12 +131,16 @@ class IngestionService:
                 )
                 
                 # Trigger the pipeline asynchronously
-                result = pipeline.apply_async()
-                celery_task_id = result.id
-                
-                logger.info(
-                    f"Started Celery pipeline {celery_task_id} for job {job_id}"
-                )
+                logger.info(f"About to queue Celery pipeline for job {job_id}")
+                try:
+                    result = pipeline.apply_async(queue='ingestion')
+                    celery_task_id = result.id
+                    logger.info(
+                        f"Started Celery pipeline {celery_task_id} for job {job_id}"
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to queue Celery pipeline: {e}", exc_info=True)
+                    raise
                 
                 return {
                     "job_id": str(job_id),

@@ -45,10 +45,10 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# Helper Functions for Database Operations
+# Helper Functions for Database Operations (Synchronous for Celery)
 # ============================================================================
 
-async def update_job_status(
+def update_job_status_sync(
     job_id: UUID,
     status: str,
     stage: Optional[str] = None,
@@ -56,7 +56,7 @@ async def update_job_status(
     error_message: Optional[str] = None,
 ) -> None:
     """
-    Update ingestion job status in the database.
+    Update ingestion job status in the database (synchronous version for Celery).
     
     Args:
         job_id: UUID of the ingestion job
@@ -65,46 +65,55 @@ async def update_job_status(
         progress_percent: Progress percentage (0-100)
         error_message: Error message if status is 'failed'
     """
-    session_maker = get_session_maker()
-    async with session_maker() as session:
-        try:
-            # Get the job
-            result = await session.execute(
-                select(IngestionJob).where(IngestionJob.id == job_id)
-            )
-            job = result.scalar_one_or_none()
-            
-            if job is None:
-                logger.error(f"Ingestion job {job_id} not found")
-                return
-            
-            # Update fields
-            job.status = status
-            if stage is not None:
-                job.stage = stage
-            if progress_percent is not None:
-                job.progress_percent = progress_percent
-            if error_message is not None:
-                job.error_message = error_message
-            
-            # Update timestamps
-            if status == "running" and job.started_at is None:
-                job.started_at = datetime.utcnow()
-            elif status in ("completed", "failed"):
-                job.completed_at = datetime.utcnow()
-            
-            await session.commit()
-            logger.info(
-                f"Updated job {job_id}: status={status}, stage={stage}, "
-                f"progress={progress_percent}%"
-            )
-            
-        except Exception as e:
-            logger.error(f"Failed to update job status: {e}")
-            await session.rollback()
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from app.core.config import get_settings
+    
+    settings = get_settings()
+    # Create synchronous engine using psycopg3
+    sync_url = settings.database_url.replace('+asyncpg', '+psycopg')
+    engine = create_engine(sync_url, pool_pre_ping=True)
+    SessionLocal = sessionmaker(bind=engine)
+    
+    session = SessionLocal()
+    try:
+        # Get the job
+        job = session.query(IngestionJob).filter(IngestionJob.id == job_id).first()
+        
+        if job is None:
+            logger.error(f"Ingestion job {job_id} not found")
+            return
+        
+        # Update fields
+        job.status = status
+        if stage is not None:
+            job.stage = stage
+        if progress_percent is not None:
+            job.progress_percent = progress_percent
+        if error_message is not None:
+            job.error_message = error_message
+        
+        # Update timestamps
+        if status == "running" and job.started_at is None:
+            job.started_at = datetime.utcnow()
+        elif status in ("completed", "failed"):
+            job.completed_at = datetime.utcnow()
+        
+        session.commit()
+        logger.info(
+            f"Updated job {job_id}: status={status}, stage={stage}, "
+            f"progress={progress_percent}%"
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to update job status: {e}")
+        session.rollback()
+    finally:
+        session.close()
+        engine.dispose()
 
 
-async def update_repository_status(
+def update_repository_status_sync(
     repository_id: UUID,
     status: str,
     error_message: Optional[str] = None,
@@ -112,7 +121,7 @@ async def update_repository_status(
     index_path: Optional[str] = None,
 ) -> None:
     """
-    Update repository status in the database.
+    Update repository status in the database (synchronous version for Celery).
     
     Args:
         repository_id: UUID of the repository
@@ -121,76 +130,108 @@ async def update_repository_status(
         chunk_count: Number of chunks indexed
         index_path: Path to the FAISS index
     """
-    session_maker = get_session_maker()
-    async with session_maker() as session:
-        try:
-            # Get the repository
-            result = await session.execute(
-                select(Repository).where(Repository.id == repository_id)
-            )
-            repo = result.scalar_one_or_none()
-            
-            if repo is None:
-                logger.error(f"Repository {repository_id} not found")
-                return
-            
-            # Update fields
-            repo.status = status
-            if error_message is not None:
-                repo.error_message = error_message
-            if chunk_count is not None:
-                repo.chunk_count = chunk_count
-            if index_path is not None:
-                repo.index_path = index_path
-            
-            repo.updated_at = datetime.utcnow()
-            
-            await session.commit()
-            logger.info(f"Updated repository {repository_id}: status={status}")
-            
-        except Exception as e:
-            logger.error(f"Failed to update repository status: {e}")
-            await session.rollback()
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from app.core.config import get_settings
+    
+    settings = get_settings()
+    # Create synchronous engine using psycopg3
+    sync_url = settings.database_url.replace('+asyncpg', '+psycopg')
+    engine = create_engine(sync_url, pool_pre_ping=True)
+    SessionLocal = sessionmaker(bind=engine)
+    
+    session = SessionLocal()
+    try:
+        # Get the repository
+        repo = session.query(Repository).filter(Repository.id == repository_id).first()
+        
+        if repo is None:
+            logger.error(f"Repository {repository_id} not found")
+            return
+        
+        # Update fields
+        repo.status = status
+        if error_message is not None:
+            repo.error_message = error_message
+        if chunk_count is not None:
+            repo.chunk_count = chunk_count
+        if index_path is not None:
+            repo.index_path = index_path
+        
+        repo.updated_at = datetime.utcnow()
+        
+        session.commit()
+        logger.info(f"Updated repository {repository_id}: status={status}")
+        
+    except Exception as e:
+        logger.error(f"Failed to update repository status: {e}")
+        session.rollback()
+    finally:
+        session.close()
+        engine.dispose()
 
 
-async def save_code_chunks(
+def save_code_chunks_sync(
     repository_id: UUID,
     chunks: List[Dict],
-) -> None:
+) -> List[UUID]:
     """
-    Save code chunks to the database.
+    Save code chunks to the database (synchronous version for Celery).
     
     Args:
         repository_id: UUID of the repository
         chunks: List of chunk dictionaries with metadata
+        
+    Returns:
+        List of chunk UUIDs in the same order as input chunks
     """
-    session_maker = get_session_maker()
-    async with session_maker() as session:
-        try:
-            # Create CodeChunk objects
-            code_chunks = []
-            for i, chunk_data in enumerate(chunks):
-                code_chunk = CodeChunk(
-                    repository_id=repository_id,
-                    file_path=chunk_data["file_path"],
-                    start_line=chunk_data["start_line"],
-                    end_line=chunk_data["end_line"],
-                    language=chunk_data["language"],
-                    content=chunk_data["content"],
-                    embedding_id=i,  # Index in FAISS
-                )
-                code_chunks.append(code_chunk)
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from app.core.config import get_settings
+    
+    settings = get_settings()
+    # Create synchronous engine using psycopg3
+    sync_url = settings.database_url.replace('+asyncpg', '+psycopg')
+    engine = create_engine(sync_url, pool_pre_ping=True)
+    SessionLocal = sessionmaker(bind=engine)
+    
+    session = SessionLocal()
+    try:
+        # Create CodeChunk objects
+        code_chunks = []
+        for i, chunk_data in enumerate(chunks):
+            # Remove NULL bytes from content (PostgreSQL doesn't support them)
+            content = chunk_data["content"].replace('\x00', '')
             
-            # Bulk insert
-            session.add_all(code_chunks)
-            await session.commit()
-            
-            logger.info(f"Saved {len(code_chunks)} code chunks for repository {repository_id}")
-            
-        except Exception as e:
-            logger.error(f"Failed to save code chunks: {e}")
-            await session.rollback()
-            raise
+            code_chunk = CodeChunk(
+                repository_id=repository_id,
+                file_path=chunk_data["file_path"],
+                start_line=chunk_data["start_line"],
+                end_line=chunk_data["end_line"],
+                language=chunk_data["language"],
+                content=content,
+                embedding_id=i,  # Index in FAISS
+            )
+            code_chunks.append(code_chunk)
+        
+        # Bulk insert
+        session.add_all(code_chunks)
+        session.commit()
+        
+        # Get the IDs after commit
+        chunk_ids = [chunk.id for chunk in code_chunks]
+        
+        logger.info(f"Saved {len(code_chunks)} code chunks for repository {repository_id}")
+        
+        return chunk_ids
+        
+    except Exception as e:
+        logger.error(f"Failed to save code chunks: {e}")
+        session.rollback()
+        raise
+    finally:
+        session.close()
+        engine.dispose()
 
 
 # ============================================================================
@@ -233,23 +274,19 @@ class IngestionTask(Task):
         # Update job status if job_id is provided
         if "job_id" in kwargs:
             job_id = kwargs["job_id"]
-            asyncio.run(
-                update_job_status(
-                    job_id=UUID(job_id),
-                    status="failed",
-                    error_message=str(exc),
-                )
+            update_job_status_sync(
+                job_id=UUID(job_id),
+                status="failed",
+                error_message=str(exc),
             )
         
         # Update repository status if repository_id is provided
         if "repository_id" in kwargs:
             repository_id = kwargs["repository_id"]
-            asyncio.run(
-                update_repository_status(
-                    repository_id=UUID(repository_id),
-                    status="failed",
-                    error_message=str(exc),
-                )
+            update_repository_status_sync(
+                repository_id=UUID(repository_id),
+                status="failed",
+                error_message=str(exc),
             )
 
 
@@ -299,21 +336,17 @@ def clone_repository(
     logger.info(f"Starting clone_repository task for {repository_url}")
     
     # Update job status
-    asyncio.run(
-        update_job_status(
-            job_id=UUID(job_id),
-            status="running",
-            stage="clone",
-            progress_percent=0,
-        )
+    update_job_status_sync(
+        job_id=UUID(job_id),
+        status="running",
+        stage="clone",
+        progress_percent=0,
     )
     
     # Update repository status
-    asyncio.run(
-        update_repository_status(
-            repository_id=UUID(repository_id),
-            status="cloning",
-        )
+    update_repository_status_sync(
+        repository_id=UUID(repository_id),
+        status="cloning",
     )
     
     try:
@@ -330,13 +363,11 @@ def clone_repository(
         )
         
         # Update job progress
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="running",
-                stage="clone",
-                progress_percent=20,
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="running",
+            stage="clone",
+            progress_percent=20,
         )
         
         logger.info(f"Successfully cloned repository {repository_url}")
@@ -357,22 +388,18 @@ def clone_repository(
         logger.error(f"Failed to clone repository {repository_url}: {e}")
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="failed",
-                stage="clone",
-                error_message=str(e),
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="failed",
+            stage="clone",
+            error_message=str(e),
         )
         
         # Update repository status
-        asyncio.run(
-            update_repository_status(
-                repository_id=UUID(repository_id),
-                status="failed",
-                error_message=str(e),
-            )
+        update_repository_status_sync(
+            repository_id=UUID(repository_id),
+            status="failed",
+            error_message=str(e),
         )
         
         raise
@@ -418,21 +445,17 @@ def read_source_files(
     logger.info(f"Starting read_source_files task for repository {repository_id}")
     
     # Update job status
-    asyncio.run(
-        update_job_status(
-            job_id=UUID(job_id),
-            status="running",
-            stage="read",
-            progress_percent=20,
-        )
+    update_job_status_sync(
+        job_id=UUID(job_id),
+        status="running",
+        stage="read",
+        progress_percent=20,
     )
     
     # Update repository status
-    asyncio.run(
-        update_repository_status(
-            repository_id=UUID(repository_id),
-            status="reading",
-        )
+    update_repository_status_sync(
+        repository_id=UUID(repository_id),
+        status="reading",
     )
     
     try:
@@ -460,13 +483,11 @@ def read_source_files(
         ]
         
         # Update job progress
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="running",
-                stage="read",
-                progress_percent=40,
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="running",
+            stage="read",
+            progress_percent=40,
         )
         
         logger.info(f"Successfully read {len(files)} source files")
@@ -483,22 +504,18 @@ def read_source_files(
         logger.error(f"Failed to read source files: {e}")
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="failed",
-                stage="read",
-                error_message=str(e),
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="failed",
+            stage="read",
+            error_message=str(e),
         )
         
         # Update repository status
-        asyncio.run(
-            update_repository_status(
-                repository_id=UUID(repository_id),
-                status="failed",
-                error_message=str(e),
-            )
+        update_repository_status_sync(
+            repository_id=UUID(repository_id),
+            status="failed",
+            error_message=str(e),
         )
         
         raise
@@ -543,21 +560,17 @@ def chunk_code_files(
     logger.info(f"Starting chunk_code_files task for repository {repository_id}")
     
     # Update job status
-    asyncio.run(
-        update_job_status(
-            job_id=UUID(job_id),
-            status="running",
-            stage="chunk",
-            progress_percent=40,
-        )
+    update_job_status_sync(
+        job_id=UUID(job_id),
+        status="running",
+        stage="chunk",
+        progress_percent=40,
     )
     
     # Update repository status
-    asyncio.run(
-        update_repository_status(
-            repository_id=UUID(repository_id),
-            status="chunking",
-        )
+    update_repository_status_sync(
+        repository_id=UUID(repository_id),
+        status="chunking",
     )
     
     try:
@@ -588,13 +601,11 @@ def chunk_code_files(
                 # Update progress periodically
                 if (i + 1) % 10 == 0 or (i + 1) == total_files:
                     progress = 40 + int((i + 1) / total_files * 20)
-                    asyncio.run(
-                        update_job_status(
-                            job_id=UUID(job_id),
-                            status="running",
-                            stage="chunk",
-                            progress_percent=progress,
-                        )
+                    update_job_status_sync(
+                        job_id=UUID(job_id),
+                        status="running",
+                        stage="chunk",
+                        progress_percent=progress,
                     )
                 
             except Exception as e:
@@ -614,22 +625,18 @@ def chunk_code_files(
         logger.error(f"Failed to chunk code files: {e}")
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="failed",
-                stage="chunk",
-                error_message=str(e),
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="failed",
+            stage="chunk",
+            error_message=str(e),
         )
         
         # Update repository status
-        asyncio.run(
-            update_repository_status(
-                repository_id=UUID(repository_id),
-                status="failed",
-                error_message=str(e),
-            )
+        update_repository_status_sync(
+            repository_id=UUID(repository_id),
+            status="failed",
+            error_message=str(e),
         )
         
         raise
@@ -674,21 +681,17 @@ def generate_embeddings(
     logger.info(f"Starting generate_embeddings task for repository {repository_id}")
     
     # Update job status
-    asyncio.run(
-        update_job_status(
-            job_id=UUID(job_id),
-            status="running",
-            stage="embed",
-            progress_percent=60,
-        )
+    update_job_status_sync(
+        job_id=UUID(job_id),
+        status="running",
+        stage="embed",
+        progress_percent=60,
     )
     
     # Update repository status
-    asyncio.run(
-        update_repository_status(
-            repository_id=UUID(repository_id),
-            status="embedding",
-        )
+    update_repository_status_sync(
+        repository_id=UUID(repository_id),
+        status="embedding",
     )
     
     try:
@@ -714,13 +717,11 @@ def generate_embeddings(
         logger.info(f"Successfully generated {len(embeddings)} embeddings")
         
         # Update job progress
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="running",
-                stage="embed",
-                progress_percent=80,
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="running",
+            stage="embed",
+            progress_percent=80,
         )
         
         # Return data for next stage
@@ -736,22 +737,18 @@ def generate_embeddings(
         logger.error(f"Failed to generate embeddings: {e}")
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="failed",
-                stage="embed",
-                error_message=str(e),
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="failed",
+            stage="embed",
+            error_message=str(e),
         )
         
         # Update repository status
-        asyncio.run(
-            update_repository_status(
-                repository_id=UUID(repository_id),
-                status="failed",
-                error_message=str(e),
-            )
+        update_repository_status_sync(
+            repository_id=UUID(repository_id),
+            status="failed",
+            error_message=str(e),
         )
         
         raise
@@ -798,32 +795,40 @@ def store_embeddings(
     logger.info(f"Starting store_embeddings task for repository {repository_id}")
     
     # Update job status
-    asyncio.run(
-        update_job_status(
-            job_id=UUID(job_id),
-            status="running",
-            stage="store",
-            progress_percent=80,
-        )
+    update_job_status_sync(
+        job_id=UUID(job_id),
+        status="running",
+        stage="store",
+        progress_percent=80,
     )
     
     # Update repository status
-    asyncio.run(
-        update_repository_status(
-            repository_id=UUID(repository_id),
-            status="storing",
-        )
+    update_repository_status_sync(
+        repository_id=UUID(repository_id),
+        status="storing",
     )
     
     try:
         # Convert embeddings back to numpy array
         embeddings = np.array(embeddings_list, dtype=np.float32)
         
+        # Convert repository_id to UUID
+        repo_uuid = UUID(repository_id)
+        
+        # Save code chunks to database FIRST to get their IDs
+        chunk_ids = save_code_chunks_sync(
+            repository_id=repo_uuid,
+            chunks=chunks,
+        )
+        
+        # Add database IDs to chunk metadata
+        for i, chunk in enumerate(chunks):
+            chunk["id"] = str(chunk_ids[i])
+        
         # Initialize vector store manager
         vector_store_manager = get_vector_store_manager()
         
         # Get or create vector store for this repository
-        repo_uuid = UUID(repository_id)
         vector_store = vector_store_manager.get_store(
             repository_id=repo_uuid,
             create_if_missing=True,
@@ -831,7 +836,7 @@ def store_embeddings(
         
         logger.info(f"Adding {len(embeddings)} embeddings to vector store")
         
-        # Add embeddings to vector store
+        # Add embeddings to vector store with database IDs in metadata
         vector_store.add_embeddings(
             embeddings=embeddings,
             chunks_metadata=chunks,
@@ -842,33 +847,21 @@ def store_embeddings(
         
         logger.info(f"Successfully stored embeddings for repository {repository_id}")
         
-        # Save code chunks to database
-        asyncio.run(
-            save_code_chunks(
-                repository_id=repo_uuid,
-                chunks=chunks,
-            )
-        )
-        
         # Update repository status
         index_path = str(vector_store.index_path)
-        asyncio.run(
-            update_repository_status(
-                repository_id=repo_uuid,
-                status="completed",
-                chunk_count=len(chunks),
-                index_path=index_path,
-            )
+        update_repository_status_sync(
+            repository_id=repo_uuid,
+            status="completed",
+            chunk_count=len(chunks),
+            index_path=index_path,
         )
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="completed",
-                stage="store",
-                progress_percent=100,
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="completed",
+            stage="store",
+            progress_percent=100,
         )
         
         logger.info(f"Ingestion pipeline completed for repository {repository_id}")
@@ -886,22 +879,18 @@ def store_embeddings(
         logger.error(f"Failed to store embeddings: {e}")
         
         # Update job status
-        asyncio.run(
-            update_job_status(
-                job_id=UUID(job_id),
-                status="failed",
-                stage="store",
-                error_message=str(e),
-            )
+        update_job_status_sync(
+            job_id=UUID(job_id),
+            status="failed",
+            stage="store",
+            error_message=str(e),
         )
         
         # Update repository status
-        asyncio.run(
-            update_repository_status(
-                repository_id=UUID(repository_id),
-                status="failed",
-                error_message=str(e),
-            )
+        update_repository_status_sync(
+            repository_id=UUID(repository_id),
+            status="failed",
+            error_message=str(e),
         )
         
         raise

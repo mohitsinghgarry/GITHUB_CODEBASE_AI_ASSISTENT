@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Load Repository | RepoMind</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#131315",
+                    "on-primary-fixed-variant": "#0e009d",
+                    "secondary-dim": "#8455ef",
+                    "on-background": "#f9f5f8",
+                    "secondary-fixed-dim": "#ceb9ff",
+                    "secondary-container": "#5516be",
+                    "surface-container": "#19191c",
+                    "outline": "#767577",
+                    "tertiary-fixed": "#69f6b8",
+                    "primary-container": "#9396ff",
+                    "error-dim": "#d73357",
+                    "on-tertiary-fixed": "#00452d",
+                    "surface-tint": "#a3a6ff",
+                    "inverse-surface": "#fcf8fb",
+                    "surface-bright": "#2c2c2f",
+                    "on-surface-variant": "#adaaad",
+                    "tertiary-fixed-dim": "#58e7ab",
+                    "on-secondary-fixed": "#40009b",
+                    "primary-fixed": "#9396ff",
+                    "on-tertiary": "#006443",
+                    "on-error": "#490013",
+                    "surface-container-lowest": "#000000",
+                    "on-tertiary-container": "#005a3c",
+                    "inverse-on-surface": "#565557",
+                    "tertiary-dim": "#58e7ab",
+                    "on-secondary": "#280067",
+                    "primary": "#a3a6ff",
+                    "tertiary-container": "#69f6b8",
+                    "on-surface": "#f9f5f8",
+                    "surface-container-highest": "#262528",
+                    "surface-dim": "#0e0e10",
+                    "primary-dim": "#6063ee",
+                    "secondary-fixed": "#dac9ff",
+                    "inverse-primary": "#494bd7",
+                    "error-container": "#a70138",
+                    "tertiary": "#9bffce",
+                    "error": "#ff6e84",
+                    "on-primary": "#0f00a4",
+                    "on-tertiary-fixed-variant": "#006544",
+                    "background": "#0e0e10",
+                    "on-primary-container": "#0a0081",
+                    "surface-container-high": "#1f1f22",
+                    "on-primary-fixed": "#000000",
+                    "outline-variant": "#48474a",
+                    "surface": "#0e0e10",
+                    "secondary": "#ac8aff",
+                    "primary-fixed-dim": "#8387ff",
+                    "on-secondary-container": "#d9c8ff",
+                    "on-secondary-fixed-variant": "#5f28c8",
+                    "on-error-container": "#ffb2b9",
+                    "surface-variant": "#262528"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .dot-grid {
+            background-image: radial-gradient(circle, #48474a 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(25, 25, 28, 0.7);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Background Layer -->
+<div class="absolute inset-0 dot-grid opacity-20 pointer-events-none"></div>
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary opacity-5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary opacity-5 blur-[120px] rounded-full"></div>
+<!-- Main Content Area -->
+<main class="relative z-10 w-full max-w-[640px] px-6 py-12 flex flex-col gap-16">
+<!-- Header Branding (Suppressed Nav Shell used for logo only) -->
+<div class="flex flex-col items-center gap-4">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-xl border border-outline-variant/15">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="psychology">psychology</span>
+</div>
+<div class="text-center">
+<h1 class="text-3xl font-extrabold tracking-tighter text-on-surface">RepoMind</h1>
+<p class="text-on-surface-variant font-medium tracking-tight mt-1">AI-Powered Dev Intelligence</p>
+</div>
+</div>
+<!-- Central Card -->
+<section class="glass-panel border border-outline-variant/15 rounded-2xl p-8 flex flex-col gap-8">
+<header class="flex flex-col gap-2">
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Load a Repository</h2>
+<p class="text-on-surface-variant text-sm">Supports public repositories from GitHub, GitLab, and Bitbucket.</p>
+</header>
+<div class="flex flex-col gap-6">
+<!-- Input Field -->
+<div class="relative group">
+<label class="absolute -top-2.5 left-4 px-2 bg-surface-container text-[10px] font-bold tracking-widest uppercase text-outline" for="repo-url">Repository URL</label>
+<div class="flex items-center gap-3 bg-surface-container-low border border-outline-variant/15 group-focus-within:border-primary/40 rounded-xl px-4 py-4 transition-all duration-300">
+<span class="material-symbols-outlined text-outline" data-icon="link">link</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface w-full font-medium placeholder:text-outline" id="repo-url" placeholder="https://github.com/username/repository" type="text"/>
+<span class="material-symbols-outlined text-tertiary-dim" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full h-14 bg-gradient-to-r from-primary to-secondary text-on-primary-container font-bold rounded-xl shadow-lg shadow-primary/10 hover:scale-[1.01] active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+                    Load &amp; Index Repository
+                </button>
+</div>
+<!-- State Progression -->
+<div class="flex flex-col gap-6 pt-4">
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center text-xs font-bold tracking-widest uppercase">
+<span class="text-on-surface">System Indexing</span>
+<span class="text-primary">64%</span>
+</div>
+<div class="space-y-4">
+<!-- Progress Item 1 -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span>Cloning repository...</span>
+<span class="text-tertiary font-medium">Done</span>
+</div>
+<div class="h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-full"></div>
+</div>
+</div>
+<!-- Progress Item 2 -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span>Reading file structure...</span>
+<span class="text-tertiary font-medium">Done</span>
+</div>
+<div class="h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-full"></div>
+</div>
+</div>
+<!-- Progress Item 3 (Active) -->
+<div class="space-y-1.5">
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span>Generating embeddings...</span>
+<span class="text-primary font-medium">Active</span>
+</div>
+<div class="h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[64%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Repositories Row -->
+<section class="flex flex-col gap-6">
+<div class="flex items-center gap-4">
+<h3 class="text-xs font-bold tracking-[0.2em] uppercase text-outline whitespace-nowrap">Recent Repositories</h3>
+<div class="h-[1px] w-full bg-outline-variant/15"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Repo Card 1 -->
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/5 flex flex-col gap-3 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="folder">folder</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-tertiary/10 text-tertiary uppercase">Indexed</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">facebook/react</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Last synced 2h ago</p>
+</div>
+</div>
+<!-- Repo Card 2 -->
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/5 flex flex-col gap-3 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="folder">folder</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-primary/10 text-primary uppercase">Stale</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface">vercel/next.js</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Last synced 5d ago</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Help -->
+<footer class="flex justify-center items-center gap-8 text-[11px] font-medium text-outline uppercase tracking-widest">
+<a class="hover:text-on-surface transition-colors flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]" data-icon="help">help</span>
+                Documentation
+            </a>
+<a class="hover:text-on-surface transition-colors flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[14px]" data-icon="shield">shield</span>
+                Privacy Policy
+            </a>
+</footer>
+</main>
+<!-- Side Decoration (Implicit AI feel) -->
+<div class="fixed top-0 right-0 h-screen w-32 pointer-events-none opacity-40 md:block hidden">
+<div class="flex flex-col gap-4 py-8 items-center h-full border-l border-outline-variant/10">
+<div class="text-[10px] [writing-mode:vertical-rl] font-bold tracking-[0.5em] text-outline uppercase">Neural Core Alpha-7</div>
+<div class="flex-grow flex flex-col justify-center gap-2">
+<div class="w-1 h-1 bg-primary rounded-full"></div>
+<div class="w-1 h-1 bg-outline-variant rounded-full"></div>
+<div class="w-1 h-8 bg-gradient-to-b from-primary to-transparent rounded-full"></div>
+<div class="w-1 h-1 bg-outline-variant rounded-full"></div>
+<div class="w-1 h-1 bg-outline-variant rounded-full"></div>
+</div>
+</div>
+</div>
+</body></html>
